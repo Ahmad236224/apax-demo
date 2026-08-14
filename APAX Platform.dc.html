@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #0E1013; }
+  * { box-sizing: border-box; }
+  a { color: #C8A253; text-decoration: none; }
+  a:hover { color: #E0BC6B; }
+  ::selection { background: #C8A253; color: #0E1013; }
+  input, select, textarea, button { font-family: inherit; }
+  :focus-visible { outline: 2px solid #C8A253; outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  @keyframes apaxPulse { 0%, 100% { opacity: .35; } 50% { opacity: .9; } }
+</style>
+</helmet>
+<div style="display: flex; min-height: 100vh; background: #0E1013; color: #E8E6E1; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 13px; line-height: 1.5; {{ print.shell }}">
+
+  <aside style="width: 260px; flex: 0 0 260px; border-right: 1px solid #23272C; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; {{ print.aside }}">
+    <div style="padding: 24px 22px 20px; border-bottom: 1px solid #23272C;">
+      <div style="display: flex; align-items: baseline; gap: 8px;">
+        <div style="font-family: Spectral, Georgia, serif; font-size: 22px; font-weight: 600; letter-spacing: .18em; color: #E8E6E1;">APAX</div>
+        <div style="width: 5px; height: 5px; background: #C8A253; margin-bottom: 4px;"></div>
+      </div>
+      <div style="margin-top: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E; line-height: 1.8;">Allocated metal<br />custody protocol</div>
+    </div>
+
+    <nav style="flex: 1; overflow-y: auto; padding: 18px 0 8px;">
+      <div style="padding: 0 22px 8px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: #4A5057;">Holdings</div>
+      <div style="display: flex; flex-direction: column;">
+        <button onClick="{{ h.go.portfolio }}" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 9px 22px; font-size: 13px; color: #C7CCD2; border-left: 2px solid {{ nav.portfolio.line }}; background: {{ nav.portfolio.bg }};" style-hover="background: #15181C;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">01</span>Portfolio</button>
+        <button onClick="{{ h.go.gold }}" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 9px 22px; font-size: 13px; color: #C7CCD2; border-left: 2px solid {{ nav.asset.line }}; background: {{ nav.asset.bg }};" style-hover="background: #15181C;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">02</span>Assets</button>
+        <button onClick="{{ h.go.activity }}" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 9px 22px; font-size: 13px; color: #C7CCD2; border-left: 2px solid {{ nav.activity.line }}; background: {{ nav.activity.bg }};" style-hover="background: #15181C;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">03</span>Activity</button>
+      </div>
+
+      <div style="padding: 18px 22px 8px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: #4A5057;">Transact</div>
+      <div style="display: flex; flex-direction: column;">
+        <button onClick="{{ h.go.buy }}" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 9px 22px; font-size: 13px; color: #C7CCD2; border-left: 2px solid {{ nav.buy.line }}; background: {{ nav.buy.bg }};" style-hover="background: #15181C;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">04</span>Buy metal</button>
+        <button onClick="{{ h.go.redeem }}" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 9px 22px; font-size: 13px; color: #C7CCD2; border-left: 2px solid {{ nav.redeem.line }}; background: {{ nav.redeem.bg }};" style-hover="background: #15181C;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">05</span>Redeem</button>
+      </div>
+
+      <div style="padding: 18px 22px 8px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: #4A5057;">Assurance</div>
+      <div style="display: flex; flex-direction: column;">
+        <button onClick="{{ h.go.reserve }}" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 9px 22px; font-size: 13px; color: #C7CCD2; border-left: 2px solid {{ nav.reserve.line }}; background: {{ nav.reserve.bg }};" style-hover="background: #15181C;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">06</span>Proof of reserve</button>
+        <button onClick="{{ h.go.obligation }}" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 9px 22px; font-size: 13px; color: #C7CCD2; border-left: 2px solid {{ nav.obligation.line }}; background: {{ nav.obligation.bg }};" style-hover="background: #15181C;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">07</span>Obligations</button>
+      </div>
+
+      <div style="padding: 18px 22px 8px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: #4A5057;">Account</div>
+      <div style="display: flex; flex-direction: column;">
+        <button onClick="{{ h.go.settings }}" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 9px 22px; font-size: 13px; color: #C7CCD2; border-left: 2px solid {{ nav.settings.line }}; background: {{ nav.settings.bg }};" style-hover="background: #15181C;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">08</span>Settings</button>
+        <button onClick="{{ h.go.auth }}" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 9px 22px; font-size: 13px; color: #C7CCD2; border-left: 2px solid {{ nav.auth.line }}; background: {{ nav.auth.bg }};" style-hover="background: #15181C;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">09</span>Access screens</button>
+      </div>
+    </nav>
+
+    <div style="border-top: 1px solid #23272C; padding: 16px 22px;">
+      <div style="display: flex; align-items: center; gap: 7px;">
+        <div style="width: 5px; height: 5px; border-radius: 50%; background: #5E9C7B;"></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: #8B9199;">Reserves attested</div>
+      </div>
+      <div style="margin-top: 8px; display: flex; align-items: baseline; gap: 4px;">
+        <div style="font-family: Spectral, Georgia, serif; font-size: 27px; font-weight: 500; font-variant-numeric: tabular-nums; color: #E8E6E1;">100.14</div>
+        <div style="font-size: 12px; color: #C8A253;">%</div>
+      </div>
+      <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">backed · Kellerman &amp; Roth AG · 2d ago</div>
+    </div>
+
+    <div style="border-top: 1px solid #23272C; padding: 12px 22px 16px; {{ print.hide }}">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: #4A5057;">State preview</div>
+      <div style="margin-top: 9px; display: flex; flex-wrap: wrap; gap: 4px;">
+        <button onClick="{{ h.view.live }}" style="all: unset; cursor: pointer; padding: 3px 7px; border: 1px solid #2E343A; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: {{ vs.live.fg }}; border-color: {{ vs.live.line }};" style-hover="color: #E8E6E1;">Live</button>
+        <button onClick="{{ h.view.loading }}" style="all: unset; cursor: pointer; padding: 3px 7px; border: 1px solid #2E343A; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: {{ vs.loading.fg }}; border-color: {{ vs.loading.line }};" style-hover="color: #E8E6E1;">Loading</button>
+        <button onClick="{{ h.view.empty }}" style="all: unset; cursor: pointer; padding: 3px 7px; border: 1px solid #2E343A; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: {{ vs.empty.fg }}; border-color: {{ vs.empty.line }};" style-hover="color: #E8E6E1;">Empty</button>
+        <button onClick="{{ h.view.error }}" style="all: unset; cursor: pointer; padding: 3px 7px; border: 1px solid #2E343A; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: {{ vs.error.fg }}; border-color: {{ vs.error.line }};" style-hover="color: #E8E6E1;">Error</button>
+        <button onClick="{{ h.view.gated }}" style="all: unset; cursor: pointer; padding: 3px 7px; border: 1px solid #2E343A; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: {{ vs.gated.fg }}; border-color: {{ vs.gated.line }};" style-hover="color: #E8E6E1;">Gated</button>
+        <button onClick="{{ h.view.pending }}" style="all: unset; cursor: pointer; padding: 3px 7px; border: 1px solid #2E343A; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: {{ vs.pending.fg }}; border-color: {{ vs.pending.line }};" style-hover="color: #E8E6E1;">Pending</button>
+      </div>
+    </div>
+  </aside>
+
+  <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+
+    <header style="position: sticky; top: 0; z-index: 20; background: #0E1013; border-bottom: 1px solid #23272C; {{ print.header }}">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 8px 32px; min-height: 46px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; min-width: 0;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: #4A5057;">Spot · USD/ozt</div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 6px; height: 6px; background: #C8A253;"></div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #8B9199;">Au</div>
+            <div style="font-size: 13px; font-variant-numeric: tabular-nums; color: #E8E6E1;">2,342.50</div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5E9C7B;">+0.42%</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 6px; height: 6px; background: #A9B2BA;"></div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #8B9199;">Ag</div>
+            <div style="font-size: 13px; font-variant-numeric: tabular-nums; color: #E8E6E1;">27.85</div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5E9C7B;">+0.18%</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 6px; height: 6px; background: #DCE3E8;"></div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #8B9199;">Pt</div>
+            <div style="font-size: 13px; font-variant-numeric: tabular-nums; color: #E8E6E1;">1,024.30</div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #B4685E;">−0.31%</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 18px; flex: 0 0 auto;">
+          <div style="display: flex; align-items: center; gap: 7px; padding: 3px 8px; border: 1px solid {{ kyc.line }};">
+            <div style="width: 5px; height: 5px; border-radius: 50%; background: {{ kyc.dot }};"></div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #C7CCD2;">{{ kyc.label }}</div>
+          </div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5F666E;">0x8f4e…3a2b</div>
+          <button onClick="{{ h.go.settings }}" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: 9px;" style-hover="opacity: .75;">
+            <div style="width: 24px; height: 24px; border: 1px solid #2E343A; display: grid; place-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #C8A253;">NR</div>
+            <div style="font-size: 12px; color: #C7CCD2;">N. Rasheed</div>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main style="flex: 1; padding: 34px 32px 72px;">
+      <div style="max-width: 1240px; margin: 0 auto;">
+
+        <sc-if value="{{ banner.error }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-bottom: 22px; border: 1px solid #4A2E2A; background: #1A1414; padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px;">
+            <div style="width: 6px; height: 6px; background: #B4685E; margin-top: 5px;"></div>
+            <div>
+              <div style="font-size: 13px; font-weight: 500; color: #E8E6E1;">Spot feed unreachable — figures below are from 14:02 UTC</div>
+              <div style="margin-top: 3px; font-size: 12px; color: #8B9199;">The custody ledger is unaffected and your holdings are intact. Buying and redeeming are paused until pricing resumes. <a href="#" onClick="{{ h.view.live }}">Retry the feed</a>.</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ banner.gated }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-bottom: 22px; border: 1px solid #4A3C22; background: #191712; padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px;">
+            <div style="width: 6px; height: 6px; background: #C8A253; margin-top: 5px;"></div>
+            <div>
+              <div style="font-size: 13px; font-weight: 500; color: #E8E6E1;">Verification pending — you can view, not transact</div>
+              <div style="margin-top: 3px; font-size: 12px; color: #8B9199;">Kellerman &amp; Roth is reviewing your documents, usually within one business day. Buying and redeeming unlock when the review clears. <a href="#" onClick="{{ h.go.auth }}">See what's outstanding</a>.</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ banner.pending }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-bottom: 22px; border: 1px solid #2E343A; background: #15181C; padding: 14px 16px; display: flex; align-items: center; gap: 12px;">
+            <div style="width: 6px; height: 6px; background: #C8A253; animation: apaxPulse 1.8s ease-in-out infinite;"></div>
+            <div style="flex: 1;">
+              <div style="font-size: 13px; font-weight: 500; color: #E8E6E1;">Mint in flight — 25.000 g gold</div>
+              <div style="margin-top: 3px; font-size: 12px; color: #8B9199;">Custody deposit confirmed at 09:14 UTC. Tokens are issued once the vault countersigns; nothing else is required from you.</div>
+            </div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5F666E;">0x7c3d…9e1f</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ is.portfolio }}" hint-placeholder-val="{{ true }}">
+          <section data-screen-label="Portfolio">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding-bottom: 20px; border-bottom: 1px solid #23272C;">
+              <div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: #C8A253;">Private client · allocated holdings</div>
+                <h1 style="margin: 10px 0 0; font-family: Spectral, Georgia, serif; font-size: 40px; font-weight: 500; letter-spacing: -0.01em; color: #E8E6E1;">Portfolio</h1>
+              </div>
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: #5F666E;">Statement · 14 Aug 2026</div>
+                <button onClick="{{ h.go.buy }}" style="all: unset; cursor: pointer; padding: 8px 16px; background: #C8A253; color: #0E1013; font-size: 12px; font-weight: 600; letter-spacing: .02em;" style-hover="background: #E0BC6B;">Buy metal</button>
+                <button onClick="{{ h.go.redeem }}" style="all: unset; cursor: pointer; padding: 8px 16px; border: 1px solid #2E343A; color: #C7CCD2; font-size: 12px; font-weight: 500;" style-hover="border-color: #C8A253; color: #E8E6E1;">Redeem</button>
+              </div>
+            </div>
+
+            <sc-if value="{{ is.loading }}" hint-placeholder-val="{{ false }}">
+              <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 1px; background: #23272C; border: 1px solid #23272C; margin-top: 24px;">
+                <div style="background: #15181C; padding: 26px 28px;">
+                  <div style="height: 10px; width: 120px; background: #23272C; animation: apaxPulse 1.6s ease-in-out infinite;"></div>
+                  <div style="height: 46px; width: 260px; background: #23272C; margin-top: 20px; animation: apaxPulse 1.6s ease-in-out infinite;"></div>
+                  <div style="height: 22px; width: 150px; background: #23272C; margin-top: 22px; animation: apaxPulse 1.6s ease-in-out infinite;"></div>
+                  <div style="display: flex; gap: 36px; margin-top: 44px;">
+                    <div style="height: 34px; width: 90px; background: #23272C; animation: apaxPulse 1.6s ease-in-out infinite;"></div>
+                    <div style="height: 34px; width: 90px; background: #23272C; animation: apaxPulse 1.6s ease-in-out infinite;"></div>
+                    <div style="height: 34px; width: 90px; background: #23272C; animation: apaxPulse 1.6s ease-in-out infinite;"></div>
+                  </div>
+                </div>
+                <div style="background: #15181C; padding: 26px 28px; display: flex; gap: 20px;">
+                  <div style="width: 54px; height: 240px; background: #23272C; animation: apaxPulse 1.6s ease-in-out infinite;"></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; gap: 16px;">
+                    <div style="height: 44px; background: #23272C; animation: apaxPulse 1.6s ease-in-out infinite;"></div>
+                    <div style="height: 44px; background: #23272C; animation: apaxPulse 1.6s ease-in-out infinite;"></div>
+                    <div style="height: 44px; background: #23272C; animation: apaxPulse 1.6s ease-in-out infinite;"></div>
+                  </div>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px;">
+                <div style="border: 1px solid #23272C; background: #15181C; height: 168px; animation: apaxPulse 1.6s ease-in-out infinite;"></div>
+                <div style="border: 1px solid #23272C; background: #15181C; height: 168px; animation: apaxPulse 1.6s ease-in-out infinite;"></div>
+                <div style="border: 1px solid #23272C; background: #15181C; height: 168px; animation: apaxPulse 1.6s ease-in-out infinite;"></div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ is.empty }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top: 24px; border: 1px solid #23272C; background: #15181C; padding: 64px 40px; text-align: center;">
+                <div style="display: flex; justify-content: center; gap: 6px; align-items: flex-end; height: 56px;">
+                  <div style="width: 26px; height: 18px; border: 1px solid #4A3C22;"></div>
+                  <div style="width: 26px; height: 34px; border: 1px solid #31363B;"></div>
+                  <div style="width: 26px; height: 26px; border: 1px solid #343A40;"></div>
+                </div>
+                <h2 style="margin: 26px 0 0; font-family: Spectral, Georgia, serif; font-size: 26px; font-weight: 500; color: #E8E6E1;">No metal allocated yet</h2>
+                <p style="margin: 10px auto 0; max-width: 460px; font-size: 13px; color: #8B9199;">Your vault account is open and verified. Buy your first gram of gold, silver or platinum, or deposit bullion you already own into Sidra Metals Vault to have it tokenised 1:1.</p>
+                <div style="margin-top: 26px; display: flex; gap: 10px; justify-content: center;">
+                  <button onClick="{{ h.go.buy }}" style="all: unset; cursor: pointer; padding: 9px 18px; background: #C8A253; color: #0E1013; font-size: 12px; font-weight: 600;" style-hover="background: #E0BC6B;">Buy metal</button>
+                  <button onClick="{{ h.go.reserve }}" style="all: unset; cursor: pointer; padding: 9px 18px; border: 1px solid #2E343A; color: #C7CCD2; font-size: 12px;" style-hover="border-color: #C8A253;">Read the reserve attestation</button>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ is.dataReady }}" hint-placeholder-val="{{ true }}">
+              <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 1px; background: #23272C; border: 1px solid #23272C; margin-top: 24px;">
+
+                <div style="background: #15181C; padding: 28px 30px 26px; display: flex; flex-direction: column;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: #5F666E;">Total holdings value</div>
+                  <div style="margin-top: 14px; display: flex; align-items: baseline;">
+                    <span style="font-family: Spectral, Georgia, serif; font-size: 20px; color: #5F666E; margin-right: 6px;">$</span>
+                    <span style="font-family: Spectral, Georgia, serif; font-size: 54px; font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; color: #E8E6E1;">{{ totals.whole }}</span>
+                    <span style="font-family: Spectral, Georgia, serif; font-size: 24px; font-variant-numeric: tabular-nums; color: #8B9199;">{{ totals.cents }}</span>
+                  </div>
+                  <div style="margin-top: 18px; display: flex; align-items: center; gap: 12px;">
+                    <div style="padding: 3px 8px; border: 1px solid #2E4A3B; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5E9C7B;">{{ totals.deltaText }}</div>
+                    <div style="font-size: 12px; color: #8B9199;">{{ totals.deltaAbs }} · spot movement only</div>
+                  </div>
+                  <div style="margin-top: auto; padding-top: 34px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; border-top: 1px solid #23272C;">
+                    <div style="padding-top: 18px;">
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Tokens held</div>
+                      <div style="margin-top: 7px; font-size: 19px; font-variant-numeric: tabular-nums; color: #E8E6E1;">{{ totals.tokensText }}</div>
+                    </div>
+                    <div style="padding-top: 18px;">
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Metal weight</div>
+                      <div style="margin-top: 7px; font-size: 19px; font-variant-numeric: tabular-nums; color: #E8E6E1;">{{ totals.kgText }}</div>
+                    </div>
+                    <div style="padding-top: 18px;">
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Custody</div>
+                      <div style="margin-top: 7px; font-size: 19px; color: #E8E6E1;">Allocated</div>
+                      <div style="margin-top: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">{{ totals.barsText }}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="background: #15181C; padding: 28px 30px 26px;">
+                  <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: #5F666E;">Assay stack · allocation</div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: #4A5057;">By spot value</div>
+                  </div>
+                  <div style="margin-top: 20px; display: flex; gap: 22px;">
+                    <div style="width: 46px; flex: 0 0 46px; display: flex; flex-direction: column; gap: 3px; height: 262px;">
+                      <sc-for list="{{ stack }}" as="seg" hint-placeholder-count="3">
+                        <button onClick="{{ seg.onClick }}" style="all: unset; cursor: pointer; width: 46px; position: relative; background: {{ seg.color }}; display: flex; align-items: flex-end; justify-content: center; min-height: 14px; {{ seg.heightStyle }}" style-hover="filter: brightness(1.15);">
+                          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; letter-spacing: .08em; color: rgba(14,16,19,.72); padding-bottom: 4px;">{{ seg.pctText }}</span>
+                        </button>
+                      </sc-for>
+                    </div>
+                    <div style="flex: 1; display: flex; flex-direction: column;">
+                      <sc-for list="{{ stack }}" as="seg" hint-placeholder-count="3">
+                        <button onClick="{{ seg.onClick }}" style="all: unset; cursor: pointer; display: block; padding: 12px 0; border-bottom: 1px solid #23272C;" style-hover="background: #191D21;">
+                          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+                            <div style="display: flex; align-items: center; gap: 9px;">
+                              <div style="width: 7px; height: 7px; background: {{ seg.color }};"></div>
+                              <div style="font-size: 14px; color: #E8E6E1;">{{ seg.label }}</div>
+                              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">{{ seg.symbol }}</div>
+                            </div>
+                            <div style="font-size: 14px; font-variant-numeric: tabular-nums; color: #E8E6E1;">{{ seg.valueText }}</div>
+                          </div>
+                          <div style="margin-top: 5px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+                            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">{{ seg.gramsText }} · {{ seg.fineness }} · {{ seg.serial }}</div>
+                            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-variant-numeric: tabular-nums; color: #8B9199;">{{ seg.pctText }}</div>
+                          </div>
+                        </button>
+                      </sc-for>
+                      <div style="margin-top: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: #4A5057;">Bar heights are proportional to spot value</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 16px;">
+                <sc-for list="{{ holdings }}" as="hd" hint-placeholder-count="3">
+                  <div style="border: 1px solid #23272C; background: #15181C; padding: 20px 22px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                      <div style="display: flex; align-items: center; gap: 9px;">
+                        <div style="width: 7px; height: 7px; background: {{ hd.color }};"></div>
+                        <div style="font-size: 14px; font-weight: 500; color: #E8E6E1;">{{ hd.label }}</div>
+                        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">{{ hd.fineness }}</div>
+                      </div>
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: {{ hd.chColor }};">{{ hd.chText }}</div>
+                    </div>
+                    <div style="margin-top: 16px; font-family: Spectral, Georgia, serif; font-size: 27px; font-weight: 500; font-variant-numeric: tabular-nums; color: #E8E6E1;">{{ hd.valueText }}</div>
+                    <div style="margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; padding-top: 14px; border-top: 1px solid #23272C;">
+                      <div>
+                        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #5F666E;">Weight</div>
+                        <div style="margin-top: 4px; font-size: 13px; font-variant-numeric: tabular-nums; color: #C7CCD2;">{{ hd.primaryWeight }}</div>
+                        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-variant-numeric: tabular-nums; color: #5F666E;">{{ hd.secondaryWeight }}</div>
+                      </div>
+                      <div>
+                        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #5F666E;">Spot</div>
+                        <div style="margin-top: 4px; font-size: 13px; font-variant-numeric: tabular-nums; color: #C7CCD2;">{{ hd.spotText }}</div>
+                        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-variant-numeric: tabular-nums; color: #5F666E;">{{ hd.perGramText }}</div>
+                      </div>
+                    </div>
+                    <div style="margin-top: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #4A5057;">{{ hd.custodian }}</div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; margin-top: 16px;">
+                <div style="border: 1px solid #23272C; background: #15181C;">
+                  <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid #23272C;">
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: #5F666E;">Recent activity</div>
+                    <button onClick="{{ h.go.activity }}" style="all: unset; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: #C8A253;" style-hover="color: #E0BC6B;">View all →</button>
+                  </div>
+                  <sc-for list="{{ recent }}" as="row" hint-placeholder-count="5">
+                    <div style="display: grid; grid-template-columns: 1.2fr .9fr .8fr .8fr; gap: 12px; align-items: center; padding: 13px 22px; border-bottom: 1px solid #1B1F23;">
+                      <div style="display: flex; align-items: center; gap: 9px; min-width: 0;">
+                        <div style="width: 6px; height: 6px; background: {{ row.color }}; flex: 0 0 6px;"></div>
+                        <div style="font-size: 13px; color: #E8E6E1; white-space: nowrap;">{{ row.typeLabel }}</div>
+                      </div>
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-variant-numeric: tabular-nums; color: #8B9199; text-align: right;">{{ row.qtyText }}</div>
+                      <div style="font-size: 12px; font-variant-numeric: tabular-nums; color: #C7CCD2; text-align: right;">{{ row.valueText }}</div>
+                      <div style="display: flex; align-items: center; justify-content: flex-end; gap: 7px;">
+                        <div style="width: 5px; height: 5px; border-radius: 50%; background: {{ row.statusColor }};"></div>
+                        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: #8B9199;">{{ row.status }}</div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+
+                <div style="border: 1px solid #23272C; background: #15181C; padding: 20px 22px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: #5F666E;">Proof of reserve</div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                      <div style="width: 5px; height: 5px; border-radius: 50%; background: #5E9C7B;"></div>
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #5E9C7B;">All matched</div>
+                    </div>
+                  </div>
+                  <sc-for list="{{ reserves }}" as="r" hint-placeholder-count="3">
+                    <div style="margin-top: 16px; padding-bottom: 14px; border-bottom: 1px solid #1B1F23;">
+                      <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                        <div style="font-size: 13px; color: #E8E6E1;">{{ r.label }}</div>
+                        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-variant-numeric: tabular-nums; color: #C7CCD2;">{{ r.ratioText }}</div>
+                      </div>
+                      <div style="margin-top: 8px; height: 3px; background: #23272C;">
+                        <div style="{{ r.barStyle }}"></div>
+                      </div>
+                      <div style="margin-top: 7px; display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">
+                        <span>{{ r.mintedText }} minted</span>
+                        <span>{{ r.reserveText }} in vault</span>
+                      </div>
+                    </div>
+                  </sc-for>
+                  <button onClick="{{ h.go.reserve }}" style="all: unset; cursor: pointer; margin-top: 16px; display: block; width: 100%; text-align: center; padding: 9px; border: 1px solid #2E343A; font-size: 12px; color: #C7CCD2;" style-hover="border-color: #C8A253; color: #E8E6E1;">Open the audit hub</button>
+                </div>
+              </div>
+            </sc-if>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ is.asset }}" hint-placeholder-val="{{ false }}">
+          <section data-screen-label="Asset detail">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding-bottom: 18px; border-bottom: 1px solid #23272C;">
+              <div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: #C8A253;">Allocated asset · {{ active.symbol }}</div>
+                <h1 style="margin: 10px 0 0; font-family: Spectral, Georgia, serif; font-size: 40px; font-weight: 500; color: #E8E6E1;">{{ active.label }}</h1>
+              </div>
+              <div style="display: flex; align-items: center; gap: 20px;">
+                <div style="text-align: right;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Spot / ozt</div>
+                  <div style="margin-top: 4px; display: flex; align-items: baseline; gap: 8px; justify-content: flex-end;">
+                    <div style="font-size: 20px; font-variant-numeric: tabular-nums; color: #E8E6E1;">{{ active.spotText }}</div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: {{ active.chColor }};">{{ active.chText }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 2px; margin-top: 18px;">
+              <sc-for list="{{ assetTabs }}" as="t" hint-placeholder-count="3">
+                <button onClick="{{ t.onClick }}" style="all: unset; cursor: pointer; padding: 9px 18px; border-bottom: 2px solid {{ t.line }}; color: {{ t.fg }}; font-size: 13px;" style-hover="color: #E8E6E1;">{{ t.label }}</button>
+              </sc-for>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 16px; margin-top: 20px;">
+              <div style="border: 1px solid #23272C; background: #15181C; padding: 22px 24px;">
+                <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: #5F666E;">Spot history · 12 months</div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #4A5057;">USD per troy ounce</div>
+                </div>
+                <div style="margin-top: 22px; display: flex; align-items: flex-end; gap: 6px; height: 210px; border-bottom: 1px solid #23272C; padding-bottom: 1px;">
+                  <sc-for list="{{ chart }}" as="c" hint-placeholder-count="12">
+                    <div style="flex: 1; height: 100%; display: flex; align-items: flex-end;">
+                      <div style="{{ c.barStyle }}"></div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="display: flex; gap: 6px; margin-top: 8px;">
+                  <sc-for list="{{ chart }}" as="c" hint-placeholder-count="12">
+                    <div style="flex: 1; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: #4A5057;">{{ c.label }}</div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="border: 1px solid #23272C; background: #15181C; padding: 22px 24px; display: flex; flex-direction: column;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: #5F666E;">Your holding</div>
+                <div style="margin-top: 14px; font-family: Spectral, Georgia, serif; font-size: 34px; font-weight: 500; font-variant-numeric: tabular-nums; color: #E8E6E1;">{{ active.valueText }}</div>
+                <div style="margin-top: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-variant-numeric: tabular-nums; color: #8B9199;">{{ active.gramsText }} · {{ active.ozText }}</div>
+                <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #23272C; display: flex; flex-direction: column; gap: 11px;">
+                  <div style="display: flex; justify-content: space-between; gap: 12px;">
+                    <span style="font-size: 12px; color: #8B9199;">Fineness</span>
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #C7CCD2;">{{ active.fineness }}</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; gap: 12px;">
+                    <span style="font-size: 12px; color: #8B9199;">Form</span>
+                    <span style="font-size: 12px; color: #C7CCD2; text-align: right;">{{ active.form }}</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; gap: 12px;">
+                    <span style="font-size: 12px; color: #8B9199;">Custodian</span>
+                    <span style="font-size: 12px; color: #C7CCD2; text-align: right;">{{ active.custodian }}</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; gap: 12px;">
+                    <span style="font-size: 12px; color: #8B9199;">Bar serials</span>
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #C8A253; text-align: right;">{{ active.serialsText }}</span>
+                  </div>
+                </div>
+                <sc-if value="{{ is.canTransact }}" hint-placeholder-val="{{ true }}">
+                  <div style="margin-top: auto; padding-top: 24px; display: flex; gap: 10px;">
+                    <button onClick="{{ h.go.buy }}" style="all: unset; cursor: pointer; flex: 1; text-align: center; padding: 10px; background: #C8A253; color: #0E1013; font-size: 12px; font-weight: 600;" style-hover="background: #E0BC6B;">Buy {{ active.label }}</button>
+                    <button onClick="{{ h.go.redeem }}" style="all: unset; cursor: pointer; flex: 1; text-align: center; padding: 10px; border: 1px solid #2E343A; color: #C7CCD2; font-size: 12px;" style-hover="border-color: #C8A253; color: #E8E6E1;">Redeem</button>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ is.gated }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top: auto; padding-top: 24px;">
+                    <div style="display: flex; gap: 10px;">
+                      <div style="flex: 1; text-align: center; padding: 10px; background: #1B1F23; color: #5F666E; font-size: 12px; font-weight: 600; cursor: not-allowed;">Buy {{ active.label }}</div>
+                      <div style="flex: 1; text-align: center; padding: 10px; border: 1px solid #23272C; color: #5F666E; font-size: 12px; cursor: not-allowed;">Redeem</div>
+                    </div>
+                    <div style="margin-top: 10px; font-size: 12px; color: #8B9199;">Both actions unlock when your identity check clears. <a href="#" onClick="{{ h.go.auth }}">Finish verification</a>.</div>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+
+            <div style="border: 1px solid #23272C; background: #15181C; margin-top: 16px;">
+              <div style="padding: 18px 22px; border-bottom: 1px solid #23272C; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: #5F666E;">{{ active.label }} transactions</div>
+              <div style="display: grid; grid-template-columns: 1.1fr .8fr .8fr .8fr 1fr; gap: 12px; padding: 11px 22px; border-bottom: 1px solid #23272C;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #4A5057;">Type</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #4A5057; text-align: right;">Quantity</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #4A5057; text-align: right;">Value</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #4A5057; text-align: right;">Status</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #4A5057; text-align: right;">Reference</div>
+              </div>
+              <sc-for list="{{ assetActivity }}" as="row" hint-placeholder-count="4">
+                <div style="display: grid; grid-template-columns: 1.1fr .8fr .8fr .8fr 1fr; gap: 12px; align-items: center; padding: 13px 22px; border-bottom: 1px solid #1B1F23;">
+                  <div style="font-size: 13px; color: #E8E6E1;">{{ row.typeLabel }}</div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-variant-numeric: tabular-nums; color: #C7CCD2; text-align: right;">{{ row.qtyText }}</div>
+                  <div style="font-size: 12px; font-variant-numeric: tabular-nums; color: #C7CCD2; text-align: right;">{{ row.valueText }}</div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: {{ row.statusColor }}; text-align: right;">{{ row.status }}</div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #C8A253; text-align: right;">{{ row.reference }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ is.buy }}" hint-placeholder-val="{{ false }}">
+          <section data-screen-label="Buy">
+            <div style="padding-bottom: 18px; border-bottom: 1px solid #23272C;">
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: #C8A253;">Deposit to mint</div>
+              <h1 style="margin: 10px 0 0; font-family: Spectral, Georgia, serif; font-size: 40px; font-weight: 500; color: #E8E6E1;">Buy gold</h1>
+              <p style="margin: 10px 0 0; max-width: 620px; font-size: 13px; color: #8B9199;">You buy allocated metal held at Sidra Metals Vault. Tokens are minted only after the vault confirms the bullion is in custody, one token per gram.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid #23272C; margin-top: 22px;">
+              <div style="padding: 16px 18px; border-right: 1px solid #23272C; background: #15181C;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #C8A253;">01</div>
+                <div style="margin-top: 8px; font-size: 13px; font-weight: 500; color: #E8E6E1;">Enter amount</div>
+                <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">Weight or currency</div>
+              </div>
+              <div style="padding: 16px 18px; border-right: 1px solid #23272C;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">02</div>
+                <div style="margin-top: 8px; font-size: 13px; color: #8B9199;">Review order</div>
+                <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #4A5057;">Fees and custody</div>
+              </div>
+              <div style="padding: 16px 18px; border-right: 1px solid #23272C;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">03</div>
+                <div style="margin-top: 8px; font-size: 13px; color: #8B9199;">Vault confirms</div>
+                <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #4A5057;">Bullion allocated</div>
+              </div>
+              <div style="padding: 16px 18px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">04</div>
+                <div style="margin-top: 8px; font-size: 13px; color: #8B9199;">Tokens issued</div>
+                <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #4A5057;">Receipt and serials</div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 16px; margin-top: 16px; align-items: start;">
+              <div style="border: 1px solid #23272C; background: #15181C; padding: 24px 26px;">
+                <sc-if value="{{ buy.s1 }}" hint-placeholder-val="{{ true }}">
+                  <div>
+                    <div style="display: flex; gap: 2px; border: 1px solid #23272C; width: fit-content;">
+                      <button onClick="{{ buy.setWeightMode }}" style="all: unset; cursor: pointer; padding: 7px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; background: #1F242A; color: #E8E6E1;">By weight</button>
+                      <button onClick="{{ buy.setCurrencyMode }}" style="all: unset; cursor: pointer; padding: 7px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #8B9199;" style-hover="color: #E8E6E1;">By value</button>
+                    </div>
+                    <div style="margin-top: 22px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Grams of gold</div>
+                    <div style="margin-top: 10px; display: flex; align-items: baseline; gap: 10px; border-bottom: 1px solid #2E343A; padding-bottom: 10px;">
+                      <input type="text" value="{{ buy.weight }}" onChange="{{ buy.onWeight }}" style="all: unset; width: 100%; font-family: Spectral, Georgia, serif; font-size: 44px; font-variant-numeric: tabular-nums; color: #E8E6E1;" />
+                      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #5F666E;">g</span>
+                    </div>
+                    <div style="margin-top: 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-variant-numeric: tabular-nums; color: #8B9199;">= {{ buy.ozText }} · {{ buy.valueText }} at spot</div>
+                      <div style="display: flex; gap: 6px;">
+                        <button onClick="{{ buy.preset10 }}" style="all: unset; cursor: pointer; padding: 4px 10px; border: 1px solid #2E343A; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8B9199;" style-hover="border-color: #C8A253; color: #E8E6E1;">10 g</button>
+                        <button onClick="{{ buy.preset50 }}" style="all: unset; cursor: pointer; padding: 4px 10px; border: 1px solid #2E343A; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8B9199;" style-hover="border-color: #C8A253; color: #E8E6E1;">50 g</button>
+                        <button onClick="{{ buy.preset100 }}" style="all: unset; cursor: pointer; padding: 4px 10px; border: 1px solid #2E343A; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8B9199;" style-hover="border-color: #C8A253; color: #E8E6E1;">100 g</button>
+                      </div>
+                    </div>
+                    <div style="margin-top: 26px; padding-top: 20px; border-top: 1px solid #23272C;">
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Custody destination</div>
+                      <div style="margin-top: 12px; border: 1px solid #4A3C22; background: #191712; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+                        <div>
+                          <div style="font-size: 13px; color: #E8E6E1;">Sidra Metals Vault · Zürich, CH</div>
+                          <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8B9199;">Allocated · segregated · Lloyd's insured</div>
+                        </div>
+                        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #C8A253;">Selected</div>
+                      </div>
+                      <div style="margin-top: 8px; border: 1px solid #23272C; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+                        <div>
+                          <div style="font-size: 13px; color: #C7CCD2;">Brink's Depository · Singapore, SG</div>
+                          <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">Platinum only — unavailable for gold</div>
+                        </div>
+                        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #4A5057;">Unavailable</div>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ buy.s2 }}" hint-placeholder-val="{{ false }}">
+                  <div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Confirm your order</div>
+                    <h2 style="margin: 12px 0 0; font-family: Spectral, Georgia, serif; font-size: 28px; font-weight: 500; color: #E8E6E1;">{{ buy.weightText }} of gold, allocated in Zürich</h2>
+                    <p style="margin: 10px 0 0; font-size: 13px; color: #8B9199;">Price is locked for 90 seconds from the moment you confirm. The vault allocates specific bars to you and publishes their serial numbers on your receipt.</p>
+                    <div style="margin-top: 22px; display: flex; flex-direction: column; gap: 12px;">
+                      <div style="display: flex; align-items: flex-start; gap: 10px;">
+                        <div style="width: 5px; height: 5px; background: #C8A253; margin-top: 6px;"></div>
+                        <div style="font-size: 12px; color: #C7CCD2;">Tokens are minted only after custody is confirmed, so nothing is issued against unallocated metal.</div>
+                      </div>
+                      <div style="display: flex; align-items: flex-start; gap: 10px;">
+                        <div style="width: 5px; height: 5px; background: #C8A253; margin-top: 6px;"></div>
+                        <div style="font-size: 12px; color: #C7CCD2;">No yield accrues on this holding. Value changes only with the metal price.</div>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ buy.s3 }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding: 26px 0;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                      <div style="width: 7px; height: 7px; background: #C8A253; animation: apaxPulse 1.8s ease-in-out infinite;"></div>
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #C8A253;">Awaiting vault countersignature</div>
+                    </div>
+                    <h2 style="margin: 16px 0 0; font-family: Spectral, Georgia, serif; font-size: 28px; font-weight: 500; color: #E8E6E1;">Your metal is being allocated</h2>
+                    <p style="margin: 10px 0 0; max-width: 520px; font-size: 13px; color: #8B9199;">The vault is assigning bars and countersigning the deposit. This usually takes under two minutes. You can leave this page — the receipt will be in your activity log.</p>
+                    <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 1px; background: #23272C; border: 1px solid #23272C;">
+                      <div style="background: #191D21; padding: 12px 16px; display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #C7CCD2;">Payment cleared</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5E9C7B;">09:14:02 UTC</span></div>
+                      <div style="background: #191D21; padding: 12px 16px; display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #C7CCD2;">Bars allocated</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #C8A253;">In progress</span></div>
+                      <div style="background: #15181C; padding: 12px 16px; display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #5F666E;">Tokens minted</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">Queued</span></div>
+                    </div>
+                    <button onClick="{{ buy.toReceipt }}" style="all: unset; cursor: pointer; margin-top: 22px; padding: 9px 18px; border: 1px solid #2E343A; font-size: 12px; color: #C7CCD2;" style-hover="border-color: #C8A253;">Simulate settlement</button>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ buy.s4 }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding: 8px 0;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                      <div style="width: 7px; height: 7px; background: #5E9C7B;"></div>
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5E9C7B;">Minted · receipt APX-MNT-2117</div>
+                    </div>
+                    <h2 style="margin: 16px 0 0; font-family: Spectral, Georgia, serif; font-size: 28px; font-weight: 500; color: #E8E6E1;">{{ buy.weightText }} of gold is yours</h2>
+                    <div style="margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #23272C; border: 1px solid #23272C;">
+                      <div style="background: #191D21; padding: 14px 16px;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #5F666E;">Bar serial</div><div style="margin-top: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #C8A253;">AU-88512-Z</div></div>
+                      <div style="background: #191D21; padding: 14px 16px;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #5F666E;">Fineness</div><div style="margin-top: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #C7CCD2;">999.9</div></div>
+                      <div style="background: #191D21; padding: 14px 16px;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #5F666E;">Mint transaction</div><div style="margin-top: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #C8A253;">0x7c3d…9e1f</div></div>
+                      <div style="background: #191D21; padding: 14px 16px;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #5F666E;">Vault</div><div style="margin-top: 6px; font-size: 12px; color: #C7CCD2;">Sidra Metals Vault, Zürich</div></div>
+                    </div>
+                    <div style="margin-top: 20px; display: flex; gap: 10px;">
+                      <button onClick="{{ h.go.portfolio }}" style="all: unset; cursor: pointer; padding: 9px 18px; background: #C8A253; color: #0E1013; font-size: 12px; font-weight: 600;" style-hover="background: #E0BC6B;">Back to portfolio</button>
+                      <button onClick="{{ buy.reset }}" style="all: unset; cursor: pointer; padding: 9px 18px; border: 1px solid #2E343A; color: #C7CCD2; font-size: 12px;" style-hover="border-color: #C8A253;">Buy more metal</button>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+
+              <div style="border: 1px solid #23272C; background: #15181C; padding: 22px 24px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: #5F666E;">Order</div>
+                <div style="margin-top: 16px; font-family: Spectral, Georgia, serif; font-size: 22px; font-weight: 500; color: #E8E6E1;">{{ buy.weightText }} gold</div>
+                <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">Cast bar · 999.9 · vault sealed</div>
+                <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid #23272C; display: flex; flex-direction: column; gap: 11px;">
+                  <div style="display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Metal value</span><span style="font-size: 12px; font-variant-numeric: tabular-nums; color: #C7CCD2;">{{ buy.valueText }}</span></div>
+                  <div style="display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Minting fee (0.50%)</span><span style="font-size: 12px; font-variant-numeric: tabular-nums; color: #C7CCD2;">{{ buy.feeText }}</span></div>
+                  <div style="display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">First-month storage</span><span style="font-size: 12px; font-variant-numeric: tabular-nums; color: #C7CCD2;">{{ buy.storageText }}</span></div>
+                  <div style="display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Tokens to be minted</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-variant-numeric: tabular-nums; color: #C7CCD2;">{{ buy.weight }} APX-AU</span></div>
+                </div>
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #2E343A; display: flex; align-items: baseline; justify-content: space-between;">
+                  <span style="font-size: 13px; font-weight: 600; color: #E8E6E1;">Total due</span>
+                  <span style="font-family: Spectral, Georgia, serif; font-size: 22px; font-variant-numeric: tabular-nums; color: #C8A253;">{{ buy.totalText }}</span>
+                </div>
+
+                <sc-if value="{{ is.gated }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top: 20px; border: 1px solid #4A3C22; background: #191712; padding: 14px;">
+                    <div style="font-size: 12px; font-weight: 500; color: #E8E6E1;">Buying is blocked until verification clears</div>
+                    <div style="margin-top: 5px; font-size: 12px; color: #8B9199;">Your documents are under review. We keep this order for 24 hours so you can confirm it as soon as you are approved.</div>
+                    <div style="margin-top: 12px; text-align: center; padding: 9px; background: #1B1F23; color: #5F666E; font-size: 12px; font-weight: 600; cursor: not-allowed;">Confirm order</div>
+                    <button onClick="{{ h.go.auth }}" style="all: unset; cursor: pointer; margin-top: 8px; display: block; width: 100%; text-align: center; padding: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #C8A253;" style-hover="color: #E0BC6B;">Check verification status</button>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is.error }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top: 20px; border: 1px solid #4A2E2A; background: #1A1414; padding: 14px;">
+                    <div style="font-size: 12px; font-weight: 500; color: #E8E6E1;">We can't price this order right now</div>
+                    <div style="margin-top: 5px; font-size: 12px; color: #8B9199;">The spot feed stopped responding at 14:02 UTC. Wait for pricing to resume, then confirm — no payment has been taken.</div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ is.canTransact }}" hint-placeholder-val="{{ true }}">
+                  <div style="margin-top: 20px;">
+                    <sc-if value="{{ buy.s1 }}" hint-placeholder-val="{{ true }}">
+                      <button onClick="{{ buy.toReview }}" style="all: unset; cursor: pointer; display: block; width: 100%; text-align: center; padding: 11px; background: #C8A253; color: #0E1013; font-size: 12px; font-weight: 600;" style-hover="background: #E0BC6B;">Review order</button>
+                    </sc-if>
+                    <sc-if value="{{ buy.s2 }}" hint-placeholder-val="{{ false }}">
+                      <button onClick="{{ buy.toPending }}" style="all: unset; cursor: pointer; display: block; width: 100%; text-align: center; padding: 11px; background: #C8A253; color: #0E1013; font-size: 12px; font-weight: 600;" style-hover="background: #E0BC6B;">Confirm and pay</button>
+                      <button onClick="{{ buy.back }}" style="all: unset; cursor: pointer; margin-top: 8px; display: block; width: 100%; text-align: center; padding: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #8B9199;" style-hover="color: #E8E6E1;">Change amount</button>
+                    </sc-if>
+                    <div style="margin-top: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; line-height: 1.7; color: #4A5057;">Storage is billed monthly at 0.35% p.a. of value. Redeem for physical delivery at any time.</div>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ is.redeem }}" hint-placeholder-val="{{ false }}">
+          <section data-screen-label="Redeem">
+            <div style="padding-bottom: 18px; border-bottom: 1px solid #23272C;">
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: #C8A253;">Burn to release</div>
+              <h1 style="margin: 10px 0 0; font-family: Spectral, Georgia, serif; font-size: 40px; font-weight: 500; color: #E8E6E1;">Redeem metal</h1>
+              <p style="margin: 10px 0 0; max-width: 640px; font-size: 13px; color: #8B9199;">Redeeming burns your tokens and releases the underlying bullion. Choose insured physical delivery or an approved cash settlement at the vault's published fix.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid #23272C; margin-top: 22px;">
+              <div style="padding: 16px 18px; border-right: 1px solid #23272C; background: #15181C;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #C8A253;">01</div>
+                <div style="margin-top: 8px; font-size: 13px; font-weight: 500; color: #E8E6E1;">Choose method</div>
+                <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">Delivery or settlement</div>
+              </div>
+              <div style="padding: 16px 18px; border-right: 1px solid #23272C;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">02</div>
+                <div style="margin-top: 8px; font-size: 13px; color: #8B9199;">Quantity and address</div>
+                <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #4A5057;">Where it ships</div>
+              </div>
+              <div style="padding: 16px 18px; border-right: 1px solid #23272C;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">03</div>
+                <div style="margin-top: 8px; font-size: 13px; color: #8B9199;">Authorise burn</div>
+                <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #4A5057;">Irreversible</div>
+              </div>
+              <div style="padding: 16px 18px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">04</div>
+                <div style="margin-top: 8px; font-size: 13px; color: #8B9199;">Track settlement</div>
+                <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #4A5057;">Requested → settled</div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 16px; margin-top: 16px; align-items: start;">
+              <div style="border: 1px solid #23272C; background: #15181C; padding: 24px 26px;">
+                <sc-if value="{{ redeem.s1 }}" hint-placeholder-val="{{ true }}">
+                  <div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Redemption method</div>
+                    <div style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                      <button onClick="{{ redeem.setDelivery }}" style="all: unset; cursor: pointer; padding: 18px; border: 1px solid #4A3C22; background: #191712; display: block;" style-hover="border-color: #C8A253;">
+                        <div style="font-size: 14px; font-weight: 500; color: #E8E6E1;">Physical delivery</div>
+                        <div style="margin-top: 6px; font-size: 12px; color: #8B9199;">Insured courier from the vault to your address. 5–15 business days, 100+ countries.</div>
+                        <div style="margin-top: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #C8A253;">Selected</div>
+                      </button>
+                      <button onClick="{{ redeem.setSettlement }}" style="all: unset; cursor: pointer; padding: 18px; border: 1px solid #23272C; display: block;" style-hover="border-color: #2E343A;">
+                        <div style="font-size: 14px; font-weight: 500; color: #C7CCD2;">Approved settlement</div>
+                        <div style="margin-top: 6px; font-size: 12px; color: #8B9199;">The vault buys the metal at the daily fix and pays your verified bank account in 2 business days.</div>
+                        <div style="margin-top: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #4A5057;">Choose</div>
+                      </button>
+                    </div>
+                    <div style="margin-top: 26px; padding-top: 20px; border-top: 1px solid #23272C;">
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Quantity · gold</div>
+                      <div style="margin-top: 10px; display: flex; align-items: baseline; gap: 10px; border-bottom: 1px solid #2E343A; padding-bottom: 10px;">
+                        <input type="text" value="{{ redeem.gramsText }}" onChange="{{ redeem.onGrams }}" style="all: unset; width: 100%; font-family: Spectral, Georgia, serif; font-size: 40px; font-variant-numeric: tabular-nums; color: #E8E6E1;" />
+                      </div>
+                      <div style="margin-top: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8B9199;">Available 156.75 g · smallest deliverable unit is a 10 g cast bar</div>
+                    </div>
+                    <div style="margin-top: 26px; padding-top: 20px; border-top: 1px solid #23272C;">
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Delivery address</div>
+                      <div style="margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <label style="display: block;"><div style="font-size: 11px; color: #8B9199;">Full name</div><input type="text" value="Nadia Rasheed" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 9px 10px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /></label>
+                        <label style="display: block;"><div style="font-size: 11px; color: #8B9199;">Phone for courier</div><input type="text" value="+971 50 224 8813" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 9px 10px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /></label>
+                        <label style="display: block; grid-column: span 2;"><div style="font-size: 11px; color: #8B9199;">Street address</div><input type="text" value="Villa 14, Al Barsha 2" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 9px 10px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /></label>
+                        <label style="display: block;"><div style="font-size: 11px; color: #8B9199;">City</div><input type="text" value="Dubai" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 9px 10px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /></label>
+                        <label style="display: block;"><div style="font-size: 11px; color: #8B9199;">Country</div><input type="text" value="United Arab Emirates" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 9px 10px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /></label>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ redeem.s2 }}" hint-placeholder-val="{{ false }}">
+                  <div>
+                    <div style="border: 1px solid #4A2E2A; background: #1A1414; padding: 16px;">
+                      <div style="font-size: 13px; font-weight: 500; color: #E8E6E1;">Burning tokens cannot be undone</div>
+                      <div style="margin-top: 5px; font-size: 12px; color: #8B9199;">{{ redeem.burnText }} will be destroyed on-chain and the matching bullion leaves your allocation. If you want the metal back afterwards you have to buy it again at the prevailing price.</div>
+                    </div>
+                    <div style="margin-top: 22px; display: flex; flex-direction: column; gap: 1px; background: #23272C; border: 1px solid #23272C;">
+                      <div style="background: #191D21; padding: 13px 16px; display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Metal released</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #C7CCD2;">{{ redeem.gramsText }} gold, 999.9</span></div>
+                      <div style="background: #191D21; padding: 13px 16px; display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Bar allocated to you</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #C8A253;">AU-88412-Z</span></div>
+                      <div style="background: #191D21; padding: 13px 16px; display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Ships to</span><span style="font-size: 12px; color: #C7CCD2;">Villa 14, Al Barsha 2, Dubai</span></div>
+                      <div style="background: #191D21; padding: 13px 16px; display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Tokens burned</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #C7CCD2;">{{ redeem.burnText }}</span></div>
+                    </div>
+                    <label style="margin-top: 20px; display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+                      <input type="checkbox" style="margin-top: 2px; accent-color: #C8A253;" />
+                      <span style="font-size: 12px; color: #C7CCD2;">I understand the burn is irreversible and I authorise the vault to release my bullion to the address above.</span>
+                    </label>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ redeem.s3 }}" hint-placeholder-val="{{ false }}">
+                  <div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #C8A253;">Redemption APX-RDM-2088</div>
+                    <h2 style="margin: 14px 0 0; font-family: Spectral, Georgia, serif; font-size: 28px; font-weight: 500; color: #E8E6E1;">Requested — the vault is preparing your bullion</h2>
+                    <div style="margin-top: 26px; display: flex; flex-direction: column;">
+                      <div style="display: grid; grid-template-columns: 18px 1fr; gap: 16px;">
+                        <div style="display: flex; flex-direction: column; align-items: center;"><div style="width: 9px; height: 9px; background: #5E9C7B; margin-top: 4px;"></div><div style="flex: 1; width: 1px; background: #2E343A;"></div></div>
+                        <div style="padding-bottom: 22px;"><div style="font-size: 13px; color: #E8E6E1;">Requested</div><div style="margin-top: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5F666E;">14 Aug 2026, 09:31 UTC · tokens burned 0x4c6d…2e5f</div></div>
+                      </div>
+                      <div style="display: grid; grid-template-columns: 18px 1fr; gap: 16px;">
+                        <div style="display: flex; flex-direction: column; align-items: center;"><div style="width: 9px; height: 9px; background: #5E9C7B; margin-top: 4px;"></div><div style="flex: 1; width: 1px; background: #2E343A;"></div></div>
+                        <div style="padding-bottom: 22px;"><div style="font-size: 13px; color: #E8E6E1;">Approved by compliance</div><div style="margin-top: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5F666E;">14 Aug 2026, 10:02 UTC · sanctions and address screening cleared</div></div>
+                      </div>
+                      <div style="display: grid; grid-template-columns: 18px 1fr; gap: 16px;">
+                        <div style="display: flex; flex-direction: column; align-items: center;"><div style="width: 9px; height: 9px; background: #C8A253; margin-top: 4px; animation: apaxPulse 1.8s ease-in-out infinite;"></div><div style="flex: 1; width: 1px; background: #2E343A;"></div></div>
+                        <div style="padding-bottom: 22px;"><div style="font-size: 13px; color: #E8E6E1;">In custody transfer</div><div style="margin-top: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #C8A253;">Bar AU-88412-Z withdrawn from the vault, awaiting courier collection</div></div>
+                      </div>
+                      <div style="display: grid; grid-template-columns: 18px 1fr; gap: 16px;">
+                        <div style="display: flex; flex-direction: column; align-items: center;"><div style="width: 9px; height: 9px; border: 1px solid #2E343A; margin-top: 4px;"></div></div>
+                        <div><div style="font-size: 13px; color: #5F666E;">Settled</div><div style="margin-top: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">Signature on delivery closes the redemption</div></div>
+                      </div>
+                    </div>
+                    <div style="margin-top: 26px; display: flex; gap: 10px;">
+                      <button onClick="{{ h.go.activity }}" style="all: unset; cursor: pointer; padding: 9px 18px; border: 1px solid #2E343A; color: #C7CCD2; font-size: 12px;" style-hover="border-color: #C8A253;">See it in activity</button>
+                      <button onClick="{{ redeem.reset }}" style="all: unset; cursor: pointer; padding: 9px 18px; color: #8B9199; font-size: 12px;" style-hover="color: #E8E6E1;">Start another redemption</button>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+
+              <div style="border: 1px solid #23272C; background: #15181C; padding: 22px 24px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: #5F666E;">Obligations and fees</div>
+                <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 11px;">
+                  <div style="display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Metal value at spot</span><span style="font-size: 12px; font-variant-numeric: tabular-nums; color: #C7CCD2;">{{ redeem.valueText }}</span></div>
+                  <div style="display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Redemption fee (1.00%)</span><span style="font-size: 12px; font-variant-numeric: tabular-nums; color: #C7CCD2;">−{{ redeem.feeText }}</span></div>
+                  <div style="display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Insured shipping</span><span style="font-size: 12px; color: #5E9C7B;">Included</span></div>
+                  <div style="display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Import duty</span><span style="font-size: 12px; color: #C7CCD2;">Payable by you</span></div>
+                </div>
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #2E343A; display: flex; align-items: baseline; justify-content: space-between;">
+                  <span style="font-size: 13px; font-weight: 600; color: #E8E6E1;">You receive</span>
+                  <span style="font-family: Spectral, Georgia, serif; font-size: 20px; font-variant-numeric: tabular-nums; color: #C8A253;">{{ redeem.gramsText }}</span>
+                </div>
+                <sc-if value="{{ is.canTransact }}" hint-placeholder-val="{{ true }}">
+                  <div style="margin-top: 20px;">
+                    <sc-if value="{{ redeem.s1 }}" hint-placeholder-val="{{ true }}">
+                      <button onClick="{{ redeem.next }}" style="all: unset; cursor: pointer; display: block; width: 100%; text-align: center; padding: 11px; background: #C8A253; color: #0E1013; font-size: 12px; font-weight: 600;" style-hover="background: #E0BC6B;">Review redemption</button>
+                    </sc-if>
+                    <sc-if value="{{ redeem.s2 }}" hint-placeholder-val="{{ false }}">
+                      <button onClick="{{ redeem.next }}" style="all: unset; cursor: pointer; display: block; width: 100%; text-align: center; padding: 11px; background: #B4685E; color: #0E1013; font-size: 12px; font-weight: 600;" style-hover="background: #C8796F;">Burn tokens and redeem</button>
+                      <button onClick="{{ redeem.back }}" style="all: unset; cursor: pointer; margin-top: 8px; display: block; width: 100%; text-align: center; padding: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #8B9199;" style-hover="color: #E8E6E1;">Go back</button>
+                    </sc-if>
+                    <div style="margin-top: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; line-height: 1.7; color: #4A5057;">The 1% fee covers de-tokenisation, assay verification and insured shipping.</div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ is.gated }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top: 20px; border: 1px solid #4A3C22; background: #191712; padding: 14px;">
+                    <div style="font-size: 12px; font-weight: 500; color: #E8E6E1;">Redeeming is blocked until verification clears</div>
+                    <div style="margin-top: 5px; font-size: 12px; color: #8B9199;">Physical delivery requires an approved identity and address check. Your metal stays allocated to you in the meantime.</div>
+                    <div style="margin-top: 12px; text-align: center; padding: 9px; background: #1B1F23; color: #5F666E; font-size: 12px; font-weight: 600; cursor: not-allowed;">Burn tokens and redeem</div>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ is.activity }}" hint-placeholder-val="{{ false }}">
+          <section data-screen-label="Activity">
+            <div style="padding-bottom: 18px; border-bottom: 1px solid #23272C;">
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: #C8A253;">Ledger</div>
+              <h1 style="margin: 10px 0 0; font-family: Spectral, Georgia, serif; font-size: 40px; font-weight: 500; color: #E8E6E1;">Activity</h1>
+            </div>
+
+            <div style="display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-top: 20px;">
+              <label style="display: block;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Asset</div>
+                <select onChange="{{ filters.onAsset }}" style="all: unset; margin-top: 6px; display: block; cursor: pointer; padding: 7px 10px; border: 1px solid #2E343A; background: #15181C; color: #C7CCD2; font-size: 12px; min-width: 130px;">
+                  <option value="all">All metals</option>
+                  <option value="gold">Gold</option>
+                  <option value="silver">Silver</option>
+                  <option value="platinum">Platinum</option>
+                </select>
+              </label>
+              <label style="display: block;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Type</div>
+                <select onChange="{{ filters.onType }}" style="all: unset; margin-top: 6px; display: block; cursor: pointer; padding: 7px 10px; border: 1px solid #2E343A; background: #15181C; color: #C7CCD2; font-size: 12px; min-width: 150px;">
+                  <option value="all">All types</option>
+                  <option value="mint">Mint</option>
+                  <option value="burn">Burn</option>
+                  <option value="transfer">Transfer</option>
+                  <option value="redemption">Redemption</option>
+                  <option value="deposit">Custody deposit</option>
+                </select>
+              </label>
+              <label style="display: block;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Status</div>
+                <select onChange="{{ filters.onStatus }}" style="all: unset; margin-top: 6px; display: block; cursor: pointer; padding: 7px 10px; border: 1px solid #2E343A; background: #15181C; color: #C7CCD2; font-size: 12px; min-width: 130px;">
+                  <option value="all">Any status</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="pending">Pending</option>
+                  <option value="failed">Failed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </label>
+              <label style="display: block;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Date range</div>
+                <input type="text" value="01 Jul — 14 Aug 2026" style="all: unset; margin-top: 6px; display: block; padding: 7px 10px; border: 1px solid #2E343A; background: #15181C; color: #C7CCD2; font-size: 12px; min-width: 170px;" />
+              </label>
+              <button onClick="{{ filters.clear }}" style="all: unset; cursor: pointer; padding: 8px 12px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #8B9199;" style-hover="color: #E8E6E1;">Clear filters</button>
+              <div style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5F666E;">{{ activityCount }}</div>
+            </div>
+
+            <div style="border: 1px solid #23272C; background: #15181C; margin-top: 16px;">
+              <div style="display: grid; grid-template-columns: 1.1fr .8fr .9fr .9fr .8fr 1.1fr; gap: 14px; padding: 12px 22px; border-bottom: 1px solid #23272C;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #4A5057;">Type</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #4A5057;">Asset</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #4A5057; text-align: right;">Quantity</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #4A5057; text-align: right;">Value</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #4A5057; text-align: right;">Status</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #4A5057; text-align: right;">Reference · time</div>
+              </div>
+              <sc-for list="{{ activityRows }}" as="row" hint-placeholder-count="8">
+                <div style="display: grid; grid-template-columns: 1.1fr .8fr .9fr .9fr .8fr 1.1fr; gap: 14px; align-items: center; padding: 14px 22px; border-bottom: 1px solid #1B1F23;">
+                  <div style="font-size: 13px; color: #E8E6E1;">{{ row.typeLabel }}</div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 6px; height: 6px; background: {{ row.color }};"></div>
+                    <div style="font-size: 12px; color: #C7CCD2;">{{ row.assetLabel }}</div>
+                  </div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-variant-numeric: tabular-nums; color: #C7CCD2; text-align: right;">{{ row.qtyText }}</div>
+                  <div style="font-size: 12px; font-variant-numeric: tabular-nums; color: #C7CCD2; text-align: right;">{{ row.valueText }}</div>
+                  <div style="display: flex; align-items: center; justify-content: flex-end; gap: 7px;">
+                    <div style="width: 5px; height: 5px; border-radius: 50%; background: {{ row.statusColor }};"></div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: #8B9199;">{{ row.status }}</div>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #C8A253;">{{ row.reference }}</div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #4A5057;">{{ row.createdAt }}</div>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 22px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5F666E;">Page 1 of 3</div>
+                <div style="display: flex; gap: 6px;">
+                  <div style="padding: 5px 11px; border: 1px solid #23272C; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4A5057;">Previous</div>
+                  <div style="padding: 5px 11px; border: 1px solid #C8A253; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #C8A253;">1</div>
+                  <button style="all: unset; cursor: pointer; padding: 5px 11px; border: 1px solid #2E343A; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8B9199;" style-hover="border-color: #C8A253; color: #E8E6E1;">2</button>
+                  <button style="all: unset; cursor: pointer; padding: 5px 11px; border: 1px solid #2E343A; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8B9199;" style-hover="border-color: #C8A253; color: #E8E6E1;">3</button>
+                  <button style="all: unset; cursor: pointer; padding: 5px 11px; border: 1px solid #2E343A; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8B9199;" style-hover="border-color: #C8A253; color: #E8E6E1;">Next</button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ is.reserve }}" hint-placeholder-val="{{ false }}">
+          <section data-screen-label="Proof of reserve">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding-bottom: 18px; border-bottom: 1px solid #23272C;">
+              <div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: #C8A253;">Certification hub</div>
+                <h1 style="margin: 10px 0 0; font-family: Spectral, Georgia, serif; font-size: 40px; font-weight: 500; color: #E8E6E1;">Proof of reserve</h1>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Last attestation</div>
+                <div style="margin-top: 5px; font-size: 13px; color: #C7CCD2;">14 Jul 2026 · Kellerman &amp; Roth AG</div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 22px;">
+              <sc-for list="{{ reserves }}" as="r" hint-placeholder-count="3">
+                <div style="border: 1px solid #23272C; background: #15181C; padding: 22px 24px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 9px;">
+                      <div style="width: 7px; height: 7px; background: {{ r.color }};"></div>
+                      <div style="font-size: 14px; font-weight: 500; color: #E8E6E1;">{{ r.label }}</div>
+                    </div>
+                    <div style="padding: 3px 8px; border: 1px solid #2E4A3B; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: {{ r.statusColor }};">{{ r.statusLabel }}</div>
+                  </div>
+                  <div style="margin-top: 20px; display: flex; align-items: baseline; justify-content: space-between;">
+                    <div>
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #5F666E;">In vault</div>
+                      <div style="margin-top: 5px; font-family: Spectral, Georgia, serif; font-size: 26px; font-variant-numeric: tabular-nums; color: #E8E6E1;">{{ r.reserveText }}</div>
+                    </div>
+                    <div style="text-align: right;">
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #5F666E;">Tokenised</div>
+                      <div style="margin-top: 5px; font-size: 17px; font-variant-numeric: tabular-nums; color: #C7CCD2;">{{ r.mintedText }}</div>
+                    </div>
+                  </div>
+                  <div style="margin-top: 18px; height: 4px; background: #23272C;">
+                    <div style="{{ r.barStyle }}"></div>
+                  </div>
+                  <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: baseline;">
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">{{ r.surplusText }}</div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-variant-numeric: tabular-nums; color: #5E9C7B;">{{ r.ratioText }} backed</div>
+                  </div>
+                  <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid #23272C; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #4A5057;">{{ r.periodText }} · {{ r.auditor }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; margin-top: 16px; align-items: start;">
+              <div style="border: 1px solid #23272C; background: #15181C;">
+                <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid #23272C;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: #5F666E;">Attestations and certifications</div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #4A5057;">5 documents</div>
+                </div>
+                <sc-for list="{{ audits }}" as="a" hint-placeholder-count="5">
+                  <div style="display: grid; grid-template-columns: 1.3fr 1.2fr 1fr auto; gap: 16px; align-items: center; padding: 16px 22px; border-bottom: 1px solid #1B1F23;">
+                    <div>
+                      <div style="font-size: 13px; color: #E8E6E1;">{{ a.scope }}</div>
+                      <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #C8A253;">{{ a.ref }}</div>
+                    </div>
+                    <div>
+                      <div style="font-size: 12px; color: #C7CCD2;">{{ a.auditor }}</div>
+                      <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">{{ a.period }}</div>
+                    </div>
+                    <div>
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: #8B9199;">{{ a.status }}</div>
+                      <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #4A5057;">Issued {{ a.issued }}</div>
+                    </div>
+                    <a href="#" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap;">Download ↓</a>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 16px;">
+                <div style="border: 1px solid #23272C; background: #15181C; padding: 22px 24px;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: #5F666E;">Circulating supply</div>
+                  <div style="margin-top: 14px; font-family: Spectral, Georgia, serif; font-size: 36px; font-weight: 500; font-variant-numeric: tabular-nums; color: #E8E6E1;">109,450</div>
+                  <div style="margin-top: 5px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">tokens across three metals · one token = one gram</div>
+                  <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid #23272C; display: flex; flex-direction: column; gap: 10px;">
+                    <div style="display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Contract</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #C8A253;">0x8f4e…3a2b</span></div>
+                    <div style="display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Standard</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #C7CCD2;">ERC-3643</span></div>
+                    <div style="display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Reserve oracle</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #C7CCD2;">Updated 5 min ago</span></div>
+                  </div>
+                </div>
+
+                <sc-for list="{{ custodians }}" as="c" hint-placeholder-count="2">
+                  <div style="border: 1px solid #23272C; background: #15181C; padding: 20px 24px;">
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Custodian</div>
+                    <div style="margin-top: 8px; font-family: Spectral, Georgia, serif; font-size: 19px; color: #E8E6E1;">{{ c.name }}</div>
+                    <div style="margin-top: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8B9199;">{{ c.city }} · {{ c.licence }}</div>
+                    <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid #23272C; display: flex; flex-direction: column; gap: 8px;">
+                      <div style="display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Holds</span><span style="font-size: 12px; color: #C7CCD2;">{{ c.holds }}</span></div>
+                      <div style="display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Basis</span><span style="font-size: 12px; color: #C7CCD2;">{{ c.segregation }}</span></div>
+                      <div style="display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #8B9199;">Insurer</span><span style="font-size: 12px; color: #C7CCD2;">{{ c.insurer }}</span></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ is.obligation }}" hint-placeholder-val="{{ false }}">
+          <section data-screen-label="Obligations">
+            <div style="padding-bottom: 18px; border-bottom: 1px solid #23272C;">
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: #C8A253;">Transparent calculation</div>
+              <h1 style="margin: 10px 0 0; font-family: Spectral, Georgia, serif; font-size: 40px; font-weight: 500; color: #E8E6E1;">Asset obligations</h1>
+              <p style="margin: 10px 0 0; max-width: 640px; font-size: 13px; color: #8B9199;">Work out what you owe on metal you hold — custody, administration, and zakat where a full lunar year has passed. Every figure below shows the arithmetic that produced it.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1.25fr; gap: 16px; margin-top: 22px; align-items: start;">
+              <div style="border: 1px solid #23272C; background: #15181C; padding: 24px 26px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Inputs</div>
+                <div style="margin-top: 18px;">
+                  <div style="font-size: 12px; color: #8B9199;">Holdings basis</div>
+                  <div style="margin-top: 8px; border: 1px solid #2E343A; padding: 12px 14px; display: flex; justify-content: space-between; align-items: baseline;">
+                    <span style="font-size: 13px; color: #E8E6E1;">Your live portfolio</span>
+                    <span style="font-size: 13px; font-variant-numeric: tabular-nums; color: #C8A253;">{{ ob.baseText }}</span>
+                  </div>
+                  <div style="margin-top: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #4A5057;">Pulled from your allocation · edit to model a different amount</div>
+                </div>
+                <div style="margin-top: 22px;">
+                  <div style="font-size: 12px; color: #8B9199;">Holding period · {{ ob.periodText }}</div>
+                  <input type="range" min="1" max="36" step="1" value="{{ ob.period }}" onChange="{{ ob.onPeriod }}" style="margin-top: 10px; width: 100%; accent-color: #C8A253;" />
+                  <div style="display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #4A5057;"><span>1 mo</span><span>36 mo</span></div>
+                </div>
+                <div style="margin-top: 22px;">
+                  <div style="font-size: 12px; color: #8B9199;">Custody tier</div>
+                  <div style="margin-top: 10px; display: flex; gap: 2px; border: 1px solid #23272C; width: fit-content;">
+                    <button onClick="{{ ob.setStandard }}" style="all: unset; cursor: pointer; padding: 8px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; background: #1F242A; color: #E8E6E1;">Standard 0.35%</button>
+                    <button onClick="{{ ob.setInstitutional }}" style="all: unset; cursor: pointer; padding: 8px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #8B9199;" style-hover="color: #E8E6E1;">Institutional 0.22%</button>
+                  </div>
+                </div>
+              </div>
+
+              <div style="border: 1px solid #23272C; background: #15181C; padding: 24px 26px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Calculated obligation</div>
+                <div style="margin-top: 14px; font-family: Spectral, Georgia, serif; font-size: 46px; font-weight: 500; font-variant-numeric: tabular-nums; color: #E8E6E1;">{{ ob.totalText }}</div>
+                <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5F666E;">over {{ ob.periodText }} · not deducted automatically</div>
+
+                <div style="margin-top: 24px; border-top: 1px solid #23272C; padding-top: 18px; display: flex; flex-direction: column; gap: 16px;">
+                  <div>
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                      <span style="font-size: 13px; color: #E8E6E1;">Custody and storage</span>
+                      <span style="font-size: 13px; font-variant-numeric: tabular-nums; color: #C7CCD2;">{{ ob.custodyText }}</span>
+                    </div>
+                    <div style="margin-top: 5px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5F666E;">{{ ob.baseText }} × {{ ob.rateText }} × {{ ob.periodText }} ÷ 12</div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                      <span style="font-size: 13px; color: #E8E6E1;">Administration</span>
+                      <span style="font-size: 13px; font-variant-numeric: tabular-nums; color: #C7CCD2;">{{ ob.adminText }}</span>
+                    </div>
+                    <div style="margin-top: 5px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5F666E;">{{ ob.baseText }} × 0.10% p.a. × {{ ob.periodText }} ÷ 12</div>
+                  </div>
+                  <sc-if value="{{ ob.zakatOn }}" hint-placeholder-val="{{ true }}">
+                    <div>
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                      <span style="font-size: 13px; color: #E8E6E1;">Zakat on metal</span>
+                      <span style="font-size: 13px; font-variant-numeric: tabular-nums; color: #C7CCD2;">{{ ob.zakatText }}</span>
+                    </div>
+                    <div style="margin-top: 5px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5F666E;">{{ ob.zakatNote }}</div>
+                    </div>
+                  </sc-if>
+                </div>
+
+                <div style="margin-top: 22px; border: 1px solid #23272C; background: #191D21; padding: 14px 16px;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Formula</div>
+                  <div style="margin-top: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; line-height: 1.8; color: #C7CCD2;">{{ ob.formula }}</div>
+                </div>
+                <div style="margin-top: 14px; font-size: 12px; color: #8B9199;">This is a calculation tool, not tax advice. Zakat treatment of allocated metal varies by school; the Sidra Advisory Board's position is published in <a href="#">SHC-2026-041</a>.</div>
+              </div>
+            </div>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ is.settings }}" hint-placeholder-val="{{ false }}">
+          <section data-screen-label="Settings">
+            <div style="padding-bottom: 18px; border-bottom: 1px solid #23272C;">
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: #C8A253;">Account</div>
+              <h1 style="margin: 10px 0 0; font-family: Spectral, Georgia, serif; font-size: 40px; font-weight: 500; color: #E8E6E1;">Settings</h1>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 22px; align-items: start;">
+              <div style="border: 1px solid #23272C; background: #15181C; padding: 24px 26px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Profile</div>
+                <div style="margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                  <label style="display: block;"><div style="font-size: 11px; color: #8B9199;">Full name</div><input type="text" value="Nadia Rasheed" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 9px 10px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /></label>
+                  <label style="display: block;"><div style="font-size: 11px; color: #8B9199;">Email</div><input type="text" value="n.rasheed@meridianfamily.ae" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 9px 10px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /></label>
+                </div>
+                <button style="all: unset; cursor: pointer; margin-top: 16px; padding: 8px 16px; background: #C8A253; color: #0E1013; font-size: 12px; font-weight: 600;" style-hover="background: #E0BC6B;">Save profile</button>
+
+                <div style="margin-top: 26px; padding-top: 20px; border-top: 1px solid #23272C;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Change password</div>
+                  <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+                    <label style="display: block;"><div style="font-size: 11px; color: #8B9199;">Current password</div><input type="password" value="············" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 9px 10px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /></label>
+                    <label style="display: block;"><div style="font-size: 11px; color: #8B9199;">New password</div><input type="password" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 9px 10px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /></label>
+                  </div>
+                  <button style="all: unset; cursor: pointer; margin-top: 14px; padding: 8px 16px; border: 1px solid #2E343A; color: #C7CCD2; font-size: 12px;" style-hover="border-color: #C8A253;">Update password</button>
+                </div>
+
+                <div style="margin-top: 26px; padding-top: 20px; border-top: 1px solid #23272C;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Linked wallet</div>
+                  <div style="margin-top: 12px; display: flex; align-items: center; gap: 10px; border: 1px solid #23272C; background: #191D21; padding: 11px 14px;">
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #C7CCD2; flex: 1; overflow: hidden; text-overflow: ellipsis;">0x8f4e91c7a3b25d0e64f8a1b90c2d7e5f4a3b2c1d</div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #4A5057;">Read only</div>
+                  </div>
+                  <div style="margin-top: 7px; font-size: 12px; color: #8B9199;">Set once at onboarding. To change it, contact your relationship manager — tokens can only be issued to a verified address.</div>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 16px;">
+                <div style="border: 1px solid #23272C; background: #15181C; padding: 24px 26px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Verification</div>
+                    <div style="display: flex; align-items: center; gap: 7px; padding: 3px 8px; border: 1px solid #2E4A3B;">
+                      <div style="width: 5px; height: 5px; border-radius: 50%; background: #5E9C7B;"></div>
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #5E9C7B;">Approved</div>
+                    </div>
+                  </div>
+                  <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 1px; background: #23272C; border: 1px solid #23272C;">
+                    <div style="background: #191D21; padding: 12px 14px; display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #C7CCD2;">Passport · AE</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5E9C7B;">Verified 04 Jun 2026</span></div>
+                    <div style="background: #191D21; padding: 12px 14px; display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #C7CCD2;">Proof of address</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5E9C7B;">Verified 04 Jun 2026</span></div>
+                    <div style="background: #191D21; padding: 12px 14px; display: flex; justify-content: space-between;"><span style="font-size: 12px; color: #C7CCD2;">Source of funds</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #C8A253;">Refresh due Dec 2026</span></div>
+                  </div>
+                  <button onClick="{{ h.go.auth }}" style="all: unset; cursor: pointer; margin-top: 14px; padding: 8px 16px; border: 1px solid #2E343A; color: #C7CCD2; font-size: 12px;" style-hover="border-color: #C8A253;">Manage documents</button>
+                </div>
+
+                <div style="border: 1px solid #23272C; background: #15181C; padding: 24px 26px;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Notifications</div>
+                  <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 14px;">
+                    <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;"><input type="checkbox" checked="checked" style="margin-top: 2px; accent-color: #C8A253;" /><span><span style="font-size: 13px; color: #E8E6E1;">Reserve attestations</span><br /><span style="font-size: 12px; color: #8B9199;">Every time a new audit is published</span></span></label>
+                    <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;"><input type="checkbox" checked="checked" style="margin-top: 2px; accent-color: #C8A253;" /><span><span style="font-size: 13px; color: #E8E6E1;">Mint and redemption receipts</span><br /><span style="font-size: 12px; color: #8B9199;">Confirmation with bar serials</span></span></label>
+                    <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;"><input type="checkbox" style="margin-top: 2px; accent-color: #C8A253;" /><span><span style="font-size: 13px; color: #E8E6E1;">Monthly statement</span><br /><span style="font-size: 12px; color: #8B9199;">Holdings, obligations and movements</span></span></label>
+                  </div>
+                </div>
+
+                <div style="border: 1px solid #23272C; background: #15181C; padding: 24px 26px;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">Sessions</div>
+                  <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;"><div><div style="font-size: 13px; color: #E8E6E1;">Chrome · Dubai, AE</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">This device · active now</div></div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #5E9C7B;">Current</div></div>
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;"><div><div style="font-size: 13px; color: #C7CCD2;">Safari · iPhone</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">Last active 12 Aug, 21:04</div></div><button style="all: unset; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #B4685E;" style-hover="color: #C8796F;">Sign out</button></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ is.auth }}" hint-placeholder-val="{{ false }}">
+          <section data-screen-label="Access screens">
+            <div style="padding-bottom: 18px; border-bottom: 1px solid #23272C; display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+              <div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: #C8A253;">Pre-account</div>
+                <h1 style="margin: 10px 0 0; font-family: Spectral, Georgia, serif; font-size: 40px; font-weight: 500; color: #E8E6E1;">Access and verification</h1>
+              </div>
+              <div style="display: flex; gap: 2px; border: 1px solid #23272C;">
+                <button onClick="{{ auth.toLogin }}" style="all: unset; cursor: pointer; padding: 8px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #C7CCD2;" style-hover="background: #1F242A;">Sign in</button>
+                <button onClick="{{ auth.toRegister }}" style="all: unset; cursor: pointer; padding: 8px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #C7CCD2;" style-hover="background: #1F242A;">Open account</button>
+                <button onClick="{{ auth.toReset }}" style="all: unset; cursor: pointer; padding: 8px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #C7CCD2;" style-hover="background: #1F242A;">Reset password</button>
+                <button onClick="{{ auth.toGate }}" style="all: unset; cursor: pointer; padding: 8px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #C7CCD2;" style-hover="background: #1F242A;">Verification gate</button>
+              </div>
+            </div>
+
+            <sc-if value="{{ auth.login }}" hint-placeholder-val="{{ true }}">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #23272C; border: 1px solid #23272C; margin-top: 22px;">
+                <div style="background: #15181C; padding: 44px 46px;">
+                  <div style="font-family: Spectral, Georgia, serif; font-size: 22px; font-weight: 600; letter-spacing: .18em; color: #E8E6E1;">APAX</div>
+                  <h2 style="margin: 34px 0 0; font-family: Spectral, Georgia, serif; font-size: 30px; font-weight: 500; color: #E8E6E1;">Sign in to your vault</h2>
+                  <div style="margin-top: 22px; border: 1px solid #4A2E2A; background: #1A1414; padding: 13px 15px;">
+                    <div style="font-size: 12px; font-weight: 500; color: #E8E6E1;">That email and password don't match</div>
+                    <div style="margin-top: 4px; font-size: 12px; color: #8B9199;">Two attempts left before the account locks for 30 minutes.</div>
+                  </div>
+                  <div style="margin-top: 22px; display: flex; flex-direction: column; gap: 16px;">
+                    <label style="display: block;"><div style="font-size: 11px; color: #8B9199;">Email</div><input type="text" value="n.rasheed@meridianfamily.ae" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 10px 12px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /></label>
+                    <label style="display: block;"><div style="display: flex; justify-content: space-between;"><span style="font-size: 11px; color: #8B9199;">Password</span><a href="#" onClick="{{ auth.toReset }}" style="font-size: 11px;">Forgot password</a></div><input type="password" value="············" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 10px 12px; border: 1px solid #B4685E; font-size: 13px; color: #E8E6E1;" /></label>
+                  </div>
+                  <button style="all: unset; cursor: pointer; margin-top: 24px; display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%; padding: 12px; background: #C8A253; color: #0E1013; font-size: 12px; font-weight: 600;" style-hover="background: #E0BC6B;">
+                    <span style="width: 6px; height: 6px; background: #0E1013; animation: apaxPulse 1.2s ease-in-out infinite;"></span>Signing in
+                  </button>
+                  <div style="margin-top: 18px; font-size: 12px; color: #8B9199;">No account yet? <a href="#" onClick="{{ auth.toRegister }}">Open a vault account</a>.</div>
+                </div>
+                <div style="background: #101317; padding: 44px 46px; display: flex; flex-direction: column; justify-content: center;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: #C8A253;">Attested this quarter</div>
+                  <div style="margin-top: 22px; display: flex; flex-direction: column; gap: 18px;">
+                    <div style="display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid #23272C;"><span style="font-size: 13px; color: #C7CCD2;">Gold in vault</span><span style="font-family: Spectral, Georgia, serif; font-size: 22px; font-variant-numeric: tabular-nums; color: #C8A253;">15.68 kg</span></div>
+                    <div style="display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid #23272C;"><span style="font-size: 13px; color: #C7CCD2;">Silver in vault</span><span style="font-family: Spectral, Georgia, serif; font-size: 22px; font-variant-numeric: tabular-nums; color: #A9B2BA;">89.24 kg</span></div>
+                    <div style="display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid #23272C;"><span style="font-size: 13px; color: #C7CCD2;">Platinum in vault</span><span style="font-family: Spectral, Georgia, serif; font-size: 22px; font-variant-numeric: tabular-nums; color: #DCE3E8;">4.52 kg</span></div>
+                  </div>
+                  <div style="margin-top: 26px; font-size: 12px; line-height: 1.7; color: #8B9199;">Counted by Kellerman &amp; Roth AG on 30 June 2026 and reconciled against circulating supply every block. No leverage, no lending, no yield.</div>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ auth.register }}" hint-placeholder-val="{{ false }}">
+              <div style="max-width: 560px; border: 1px solid #23272C; background: #15181C; padding: 40px 44px; margin-top: 22px;">
+                <h2 style="margin: 0; font-family: Spectral, Georgia, serif; font-size: 30px; font-weight: 500; color: #E8E6E1;">Open a vault account</h2>
+                <p style="margin: 10px 0 0; font-size: 13px; color: #8B9199;">You can browse reserves straight away. Buying and redeeming open once your identity check clears, usually within one business day.</p>
+                <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 16px;">
+                  <label style="display: block;"><div style="font-size: 11px; color: #8B9199;">Email</div><input type="text" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 10px 12px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /></label>
+                  <label style="display: block;"><div style="font-size: 11px; color: #8B9199;">Password</div><input type="password" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 10px 12px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /><div style="margin-top: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">At least 12 characters, one number, one symbol</div></label>
+                  <label style="display: block;"><div style="font-size: 11px; color: #8B9199;">Confirm password</div><input type="password" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 10px 12px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /></label>
+                  <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;"><input type="checkbox" style="margin-top: 2px; accent-color: #C8A253;" /><span style="font-size: 12px; color: #C7CCD2;">I accept the custody terms and confirm I am buying metal for myself, not on behalf of another party.</span></label>
+                </div>
+                <button style="all: unset; cursor: pointer; margin-top: 24px; display: block; width: 100%; text-align: center; padding: 12px; background: #C8A253; color: #0E1013; font-size: 12px; font-weight: 600;" style-hover="background: #E0BC6B;">Open account</button>
+                <div style="margin-top: 16px; font-size: 12px; color: #8B9199;">Already have one? <a href="#" onClick="{{ auth.toLogin }}">Sign in</a>.</div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ auth.reset }}" hint-placeholder-val="{{ false }}">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 22px; align-items: start;">
+                <div style="border: 1px solid #23272C; background: #15181C; padding: 36px 40px;">
+                  <h2 style="margin: 0; font-family: Spectral, Georgia, serif; font-size: 26px; font-weight: 500; color: #E8E6E1;">Reset your password</h2>
+                  <p style="margin: 10px 0 0; font-size: 13px; color: #8B9199;">Enter the email on your account. We send a single-use link that expires in 30 minutes.</p>
+                  <label style="margin-top: 20px; display: block;"><div style="font-size: 11px; color: #8B9199;">Email</div><input type="text" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 10px 12px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /></label>
+                  <button style="all: unset; cursor: pointer; margin-top: 20px; display: block; width: 100%; text-align: center; padding: 11px; background: #C8A253; color: #0E1013; font-size: 12px; font-weight: 600;" style-hover="background: #E0BC6B;">Send reset link</button>
+                  <div style="margin-top: 14px; font-size: 12px; color: #8B9199;"><a href="#" onClick="{{ auth.toLogin }}">Back to sign in</a></div>
+                </div>
+                <div style="border: 1px solid #23272C; background: #15181C; padding: 36px 40px;">
+                  <h2 style="margin: 0; font-family: Spectral, Georgia, serif; font-size: 26px; font-weight: 500; color: #E8E6E1;">Set a new password</h2>
+                  <p style="margin: 10px 0 0; font-size: 13px; color: #8B9199;">Signing in again also ends every other session on your account.</p>
+                  <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 14px;">
+                    <label style="display: block;"><div style="font-size: 11px; color: #8B9199;">New password</div><input type="password" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 10px 12px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /></label>
+                    <label style="display: block;"><div style="font-size: 11px; color: #8B9199;">Confirm new password</div><input type="password" style="all: unset; margin-top: 6px; display: block; width: 100%; padding: 10px 12px; border: 1px solid #2E343A; font-size: 13px; color: #E8E6E1;" /></label>
+                  </div>
+                  <button style="all: unset; cursor: pointer; margin-top: 20px; display: block; width: 100%; text-align: center; padding: 11px; background: #C8A253; color: #0E1013; font-size: 12px; font-weight: 600;" style-hover="background: #E0BC6B;">Save new password</button>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ auth.gate }}" hint-placeholder-val="{{ false }}">
+              <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 16px; margin-top: 22px; align-items: start;">
+                <div style="border: 1px solid #23272C; background: #15181C; padding: 30px 32px;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 7px; height: 7px; background: #C8A253; animation: apaxPulse 1.8s ease-in-out infinite;"></div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #C8A253;">Status · pending review</div>
+                  </div>
+                  <h2 style="margin: 16px 0 0; font-family: Spectral, Georgia, serif; font-size: 30px; font-weight: 500; color: #E8E6E1;">Two documents to go</h2>
+                  <p style="margin: 10px 0 0; max-width: 520px; font-size: 13px; color: #8B9199;">Custody regulation requires us to know who owns the metal before any bullion is allocated. Until this clears you can view reserves and audits, but buying and redeeming stay closed.</p>
+
+                  <div style="margin-top: 26px; display: flex; gap: 2px;">
+                    <div style="flex: 1; padding: 12px 14px; border: 1px solid #2E4A3B; background: #141A17;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #5E9C7B;">01 · Submitted</div><div style="margin-top: 6px; font-size: 12px; color: #C7CCD2;">Email confirmed</div></div>
+                    <div style="flex: 1; padding: 12px 14px; border: 1px solid #4A3C22; background: #191712;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #C8A253;">02 · In review</div><div style="margin-top: 6px; font-size: 12px; color: #C7CCD2;">Identity documents</div></div>
+                    <div style="flex: 1; padding: 12px 14px; border: 1px solid #23272C;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #4A5057;">03 · Waiting</div><div style="margin-top: 6px; font-size: 12px; color: #5F666E;">Compliance approval</div></div>
+                  </div>
+
+                  <div style="margin-top: 26px; border: 1px dashed #2E343A; background: #12151A; padding: 34px; text-align: center;">
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #C8A253;">Drop files here</div>
+                    <div style="margin-top: 10px; font-size: 13px; color: #C7CCD2;">Passport or national ID, plus proof of address dated within 3 months</div>
+                    <div style="margin-top: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">PDF, JPG or PNG · up to 10 MB each</div>
+                    <button style="all: unset; cursor: pointer; margin-top: 18px; padding: 9px 18px; border: 1px solid #2E343A; color: #C7CCD2; font-size: 12px;" style-hover="border-color: #C8A253;">Choose files</button>
+                  </div>
+
+                  <div style="margin-top: 18px; display: flex; flex-direction: column; gap: 1px; background: #23272C; border: 1px solid #23272C;">
+                    <div style="background: #191D21; padding: 13px 15px; display: flex; align-items: center; justify-content: space-between; gap: 12px;"><div><div style="font-size: 12px; color: #E8E6E1;">passport-rasheed.pdf</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #5F666E;">1.4 MB · uploaded 13 Aug</div></div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #C8A253;">In review</div></div>
+                    <div style="background: #191D21; padding: 13px 15px; display: flex; align-items: center; justify-content: space-between; gap: 12px;"><div><div style="font-size: 12px; color: #E8E6E1;">utility-bill-july.pdf</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #B4685E;">Rejected — issued more than 3 months ago</div></div><button style="all: unset; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #C8A253;" style-hover="color: #E0BC6B;">Replace</button></div>
+                  </div>
+                </div>
+
+                <div style="border: 1px solid #23272C; background: #15181C; padding: 26px 28px;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #5F666E;">What happens next</div>
+                  <div style="margin-top: 18px; display: flex; flex-direction: column; gap: 18px;">
+                    <div style="display: flex; gap: 12px;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #C8A253;">01</div><div><div style="font-size: 13px; color: #E8E6E1;">We check your documents</div><div style="margin-top: 3px; font-size: 12px; color: #8B9199;">A compliance officer reviews them by hand. Usually within one business day.</div></div></div>
+                    <div style="display: flex; gap: 12px;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #C8A253;">02</div><div><div style="font-size: 13px; color: #E8E6E1;">You get an email either way</div><div style="margin-top: 3px; font-size: 12px; color: #8B9199;">If something is unreadable or out of date we say exactly what to send instead.</div></div></div>
+                    <div style="display: flex; gap: 12px;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #C8A253;">03</div><div><div style="font-size: 13px; color: #E8E6E1;">Buying and redeeming open</div><div style="margin-top: 3px; font-size: 12px; color: #8B9199;">Your wallet address is registered on the token's allow-list at the same moment.</div></div></div>
+                  </div>
+                  <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid #23272C; font-size: 12px; color: #8B9199;">Documents are held encrypted by our KYC processor and are never written on-chain. Read the <a href="#">custody and data terms</a>.</div>
+                </div>
+              </div>
+            </sc-if>
+          </section>
+        </sc-if>
+
+        <!--SCREENS-->
+
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:980},&quot;weightUnit&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;grams&quot;,&quot;troy ounces&quot;],&quot;default&quot;:&quot;grams&quot;,&quot;tsType&quot;:&quot;\&quot;grams\&quot; | \&quot;troy ounces\&quot;&quot;,&quot;section&quot;:&quot;Behaviour&quot;},&quot;zakatEnabled&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;},&quot;route&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;\&quot;portfolio\&quot; | \&quot;asset\&quot; | \&quot;activity\&quot; | \&quot;buy\&quot; | \&quot;redeem\&quot; | \&quot;reserve\&quot; | \&quot;obligation\&quot; | \&quot;settings\&quot; | \&quot;auth\&quot;&quot;},&quot;view&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;\&quot;live\&quot; | \&quot;loading\&quot; | \&quot;empty\&quot; | \&quot;error\&quot; | \&quot;gated\&quot; | \&quot;pending\&quot;&quot;},&quot;printMode&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const G_PER_OZ = 31.1034768;
+
+const METALS = {
+  gold: { key: 'gold', label: 'Gold', symbol: 'APX-AU', el: 'Au', color: '#C8A253', dim: '#4A3C22',
+    grams: 156.75, spot: 2342.50, ch: 0.42, fineness: '999.9', form: 'Cast bar, 100 g + 50 g',
+    custodian: 'Sidra Metals Vault, Zürich', serials: ['AU-88412-Z', 'AU-88461-Z'],
+    series: [2210, 2244, 2231, 2268, 2290, 2275, 2302, 2331, 2318, 2340, 2336, 2342.5] },
+  silver: { key: 'silver', label: 'Silver', symbol: 'APX-AG', el: 'Ag', color: '#A9B2BA', dim: '#31363B',
+    grams: 892.40, spot: 27.85, ch: 0.18, fineness: '999.0', form: 'Cast bar, 1 kg',
+    custodian: 'Sidra Metals Vault, Zürich', serials: ['AG-21094-Z'],
+    series: [26.4, 26.9, 27.1, 26.8, 27.3, 27.6, 27.4, 27.7, 27.9, 27.6, 27.8, 27.85] },
+  platinum: { key: 'platinum', label: 'Platinum', symbol: 'APX-PT', el: 'Pt', color: '#DCE3E8', dim: '#343A40',
+    grams: 45.20, spot: 1024.30, ch: -0.31, fineness: '999.5', form: 'Minted bar, 50 g',
+    custodian: "Brink's Depository, Singapore", serials: ['PT-40771-S'],
+    series: [1062, 1054, 1048, 1039, 1044, 1031, 1036, 1028, 1033, 1027, 1029, 1024.3] }
+};
+
+const ACTIVITY = [
+  { id: 'a1', type: 'mint', asset: 'gold', quantityGrams: 25, valueUsd: 1882.83, status: 'pending', reference: '0x7c3d…9e1f', createdAt: '2026-08-14 09:14' },
+  { id: 'a2', type: 'redemption', asset: 'silver', quantityGrams: 50, valueUsd: 44.77, status: 'confirmed', reference: '0x4c6d…2e5f', createdAt: '2026-08-13 16:40' },
+  { id: 'a3', type: 'deposit', asset: 'gold', quantityGrams: 100, valueUsd: 7531.31, status: 'confirmed', reference: '0x2a5b…7d4c', createdAt: '2026-08-12 11:02' },
+  { id: 'a4', type: 'mint', asset: 'platinum', quantityGrams: 20, valueUsd: 658.55, status: 'confirmed', reference: '0x9f1e…8b3a', createdAt: '2026-08-11 14:27' },
+  { id: 'a5', type: 'transfer', asset: 'gold', quantityGrams: 10, valueUsd: 753.13, status: 'confirmed', reference: '0x51aa…c082', createdAt: '2026-08-09 08:55' },
+  { id: 'a6', type: 'burn', asset: 'silver', quantityGrams: 120, valueUsd: 107.45, status: 'failed', reference: 'APX-RDM-2041', createdAt: '2026-08-07 19:12' },
+  { id: 'a7', type: 'mint', asset: 'silver', quantityGrams: 500, valueUsd: 447.71, status: 'confirmed', reference: '0x6b20…41de', createdAt: '2026-08-04 10:31' },
+  { id: 'a8', type: 'redemption', asset: 'gold', quantityGrams: 31.1, valueUsd: 2342.50, status: 'cancelled', reference: 'APX-RDM-1988', createdAt: '2026-07-30 13:48' },
+  { id: 'a9', type: 'deposit', asset: 'platinum', quantityGrams: 25.2, valueUsd: 829.66, status: 'confirmed', reference: '0x8d71…0a19', createdAt: '2026-07-28 15:05' },
+  { id: 'a10', type: 'mint', asset: 'gold', quantityGrams: 50, valueUsd: 3765.66, status: 'confirmed', reference: '0xa39c…5f77', createdAt: '2026-07-21 09:47' }
+];
+
+const RESERVES = [
+  { id: 'r1', asset: 'gold', mintedSupplyGrams: 15650, auditedReserveGrams: 15680, auditor: 'Kellerman & Roth AG', periodEnd: '2026-06-30', status: 'matched' },
+  { id: 'r2', asset: 'silver', mintedSupplyGrams: 89120, auditedReserveGrams: 89240, auditor: 'Kellerman & Roth AG', periodEnd: '2026-06-30', status: 'matched' },
+  { id: 'r3', asset: 'platinum', mintedSupplyGrams: 4510, auditedReserveGrams: 4520, auditor: 'Kellerman & Roth AG', periodEnd: '2026-06-30', status: 'matched' }
+];
+
+const AUDITS = [
+  { id: 'p1', ref: 'POR-2026-Q2', auditor: 'Kellerman & Roth AG', scope: 'All metals · physical count', period: '01 Apr — 30 Jun 2026', issued: '14 Jul 2026', status: 'Current' },
+  { id: 'p2', ref: 'SHC-2026-041', auditor: 'Sidra Advisory Board', scope: 'Sharia compliance review', period: '01 Jan — 31 Mar 2026', issued: '22 Apr 2026', status: 'Active to Mar 2027' },
+  { id: 'p3', ref: 'INS-88-4417', auditor: "Lloyd's Syndicate 2623", scope: 'Vault custody & all-risk insurance', period: 'Policy year 2026', issued: '02 Jan 2026', status: 'Active to Jan 2027' },
+  { id: 'p4', ref: 'POR-2026-Q1', auditor: 'Kellerman & Roth AG', scope: 'All metals · physical count', period: '01 Jan — 31 Mar 2026', issued: '11 Apr 2026', status: 'Superseded' },
+  { id: 'p5', ref: 'VQF-2026-118', auditor: 'VQF Self-Regulatory Org.', scope: 'AML / CFT programme', period: 'Programme year 2026', issued: '09 Feb 2026', status: 'Renewal due Sep 2026' }
+];
+
+const CUSTODIANS = [
+  { id: 'c1', name: 'Sidra Metals Vault', city: 'Zürich, CH', licence: 'FINMA-registered depository', holds: 'Gold, silver', segregation: 'Allocated, segregated', insurer: "Lloyd's Syndicate 2623" },
+  { id: 'c2', name: "Brink's Depository", city: 'Singapore, SG', licence: 'MAS-approved vault operator', holds: 'Platinum', segregation: 'Allocated, segregated', insurer: "Lloyd's Syndicate 2623" }
+];
+
+const TYPE_LABEL = { mint: 'Mint', burn: 'Burn', transfer: 'Transfer', redemption: 'Redemption', deposit: 'Custody deposit' };
+const STATUS_COLOR = { confirmed: '#5E9C7B', pending: '#C8A253', failed: '#B4685E', cancelled: '#8B9199' };
+
+class Component extends DCLogic {
+  state = {
+    route: 'portfolio',
+    asset: 'gold',
+    view: 'live',
+    buyStep: 1,
+    buyMode: 'weight',
+    buyWeight: '10',
+    buyCurrency: '750',
+    redeemStep: 1,
+    redeemMethod: 'delivery',
+    redeemGrams: 10,
+    filterAsset: 'all',
+    filterType: 'all',
+    filterStatus: 'all',
+    page: 1,
+    obPeriod: 12,
+    obTier: 'standard',
+    authScreen: 'login'
+  };
+
+  usd(n, dp) {
+    const d = dp === undefined ? 2 : dp;
+    return '$' + n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+  }
+  num(n, dp) {
+    const d = dp === undefined ? 2 : dp;
+    return n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+  }
+  signed(n) { return (n >= 0 ? '+' : '−') + Math.abs(n).toFixed(2) + '%'; }
+
+  holdings() {
+    const ozFirst = (this.props.weightUnit || 'grams') === 'troy ounces';
+    return Object.keys(METALS).map((k) => {
+      const m = METALS[k];
+      const oz = m.grams / G_PER_OZ;
+      const value = oz * m.spot;
+      return Object.assign({}, m, {
+        primaryWeight: ozFirst ? this.num(oz, 4) + ' ozt' : this.num(m.grams, 2) + ' g',
+        secondaryWeight: ozFirst ? this.num(m.grams, 2) + ' g' : this.num(oz, 4) + ' ozt',
+        oz: oz, value: value,
+        gramsText: this.num(m.grams, 2) + ' g',
+        ozText: this.num(oz, 4) + ' ozt',
+        valueText: this.usd(value),
+        spotText: this.usd(m.spot),
+        perGramText: this.usd(m.spot / G_PER_OZ) + '/g',
+        chText: this.signed(m.ch),
+        chColor: m.ch >= 0 ? '#5E9C7B' : '#B4685E',
+        tokens: this.num(m.grams, 2)
+      });
+    });
+  }
+
+  nav(route) {
+    const on = this.state.route === route;
+    return { line: on ? '#C8A253' : 'transparent', bg: on ? '#15181C' : 'transparent' };
+  }
+  viewChip(v) {
+    const on = this.state.view === v;
+    return { fg: on ? '#C8A253' : '#5F666E', line: on ? '#4A3C22' : '#2E343A' };
+  }
+
+  set(patch) { this.setState(patch); }
+
+  renderVals() {
+    const s = this.state;
+    const hs = this.holdings();
+    const total = hs.reduce((a, b) => a + b.value, 0);
+    const totalGrams = hs.reduce((a, b) => a + b.grams, 0);
+    const view = this.props.view || s.view;
+    const route = this.props.route || s.route;
+    const printMode = this.props.printMode === true;
+    const gated = view === 'gated';
+
+    const stack = hs.map((hd) => ({
+      key: hd.key, label: hd.label, color: hd.color, dim: hd.dim,
+      pct: (hd.value / total) * 100,
+      pctText: ((hd.value / total) * 100).toFixed(1) + '%',
+      heightStyle: 'height: ' + ((hd.value / total) * 100).toFixed(2) + '%',
+      valueText: hd.valueText, gramsText: hd.primaryWeight, ozText: hd.secondaryWeight,
+      serial: hd.serials[0], fineness: hd.fineness, symbol: hd.symbol,
+      onClick: () => this.set({ route: 'asset', asset: hd.key })
+    }));
+
+    const activity = ACTIVITY.map((a) => {
+      const m = METALS[a.asset];
+      return Object.assign({}, a, {
+        typeLabel: TYPE_LABEL[a.type], assetLabel: m.label, color: m.color,
+        qtyText: this.num(a.quantityGrams, 3) + ' g',
+        valueText: this.usd(a.valueUsd),
+        statusColor: STATUS_COLOR[a.status],
+        statusLabel: a.status.charAt(0).toUpperCase() + a.status.slice(1)
+      });
+    });
+
+    const filtered = activity.filter((a) =>
+      (s.filterAsset === 'all' || a.asset === s.filterAsset) &&
+      (s.filterType === 'all' || a.type === s.filterType) &&
+      (s.filterStatus === 'all' || a.status === s.filterStatus));
+
+    const reserves = RESERVES.map((r) => {
+      const m = METALS[r.asset];
+      const ratio = (r.auditedReserveGrams / r.mintedSupplyGrams) * 100;
+      return {
+        id: r.id, label: m.label, color: m.color, auditor: r.auditor,
+        mintedText: this.num(r.mintedSupplyGrams / 1000, 2) + ' kg',
+        reserveText: this.num(r.auditedReserveGrams / 1000, 2) + ' kg',
+        surplusText: '+' + this.num((r.auditedReserveGrams - r.mintedSupplyGrams) / 1000, 3) + ' kg surplus',
+        ratioText: ratio.toFixed(2) + '%',
+        matched: r.status === 'matched',
+        statusLabel: r.status === 'matched' ? 'Matched' : 'Discrepancy',
+        statusColor: r.status === 'matched' ? '#5E9C7B' : '#B4685E',
+        periodText: 'Period end ' + r.periodEnd,
+        barStyle: 'height: 100%; width: ' + Math.min(100, (r.mintedSupplyGrams / r.auditedReserveGrams) * 100).toFixed(2) + '%; background: ' + m.color
+      };
+    });
+
+    // obligation calculator
+    const rate = s.obTier === 'standard' ? 0.0035 : 0.0022;
+    const months = Number(s.obPeriod);
+    const custody = total * rate * (months / 12);
+    const admin = total * 0.001 * (months / 12);
+    const zakatOn = this.props.zakatEnabled !== false;
+    const zakat = zakatOn ? total * 0.025 * (months >= 12 ? 1 : 0) : 0;
+    const obligationTotal = custody + admin + zakat;
+
+    const active = METALS[s.asset];
+    const activeH = hs.filter((x) => x.key === s.asset)[0];
+    const chartMax = Math.max.apply(null, active.series) * 1.02;
+    const chartMin = Math.min.apply(null, active.series) * 0.98;
+    const chart = active.series.map((v, i) => ({
+      i: i,
+      barStyle: 'width: 100%; background: ' + active.color + '; opacity: ' + (0.35 + 0.55 * (i / (active.series.length - 1))).toFixed(2) + '; height: ' + (((v - chartMin) / (chartMax - chartMin)) * 100).toFixed(1) + '%',
+      label: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'][i]
+    }));
+
+    const buyGrams = Number(s.buyWeight) || 0;
+    const buyValue = (buyGrams / G_PER_OZ) * METALS.gold.spot;
+    const buyFee = buyValue * 0.005;
+    const buyStorage = 1.20;
+
+    const redeemValue = (Number(s.redeemGrams) / G_PER_OZ) * METALS.gold.spot;
+    const redeemFee = redeemValue * 0.01;
+
+    return {
+      nav: {
+        portfolio: this.nav('portfolio'), asset: this.nav('asset'), activity: this.nav('activity'),
+        buy: this.nav('buy'), redeem: this.nav('redeem'), reserve: this.nav('reserve'),
+        obligation: this.nav('obligation'), settings: this.nav('settings'), auth: this.nav('auth')
+      },
+      vs: {
+        live: this.viewChip('live'), loading: this.viewChip('loading'), empty: this.viewChip('empty'),
+        error: this.viewChip('error'), gated: this.viewChip('gated'), pending: this.viewChip('pending')
+      },
+      print: printMode
+        ? { shell: 'min-height: 0', aside: 'position: static; height: auto', header: 'position: static', hide: 'display: none' }
+        : { shell: '', aside: '', header: '', hide: '' },
+      kyc: gated
+        ? { label: 'KYC pending', dot: '#C8A253', line: '#4A3C22' }
+        : { label: 'KYC approved', dot: '#5E9C7B', line: '#2E343A' },
+      banner: {
+        error: view === 'error', gated: gated, pending: view === 'pending'
+      },
+      is: {
+        portfolio: route === 'portfolio', asset: route === 'asset', activity: route === 'activity',
+        buy: route === 'buy', redeem: route === 'redeem', reserve: route === 'reserve',
+        obligation: route === 'obligation', settings: route === 'settings', auth: route === 'auth',
+        loading: view === 'loading', empty: view === 'empty', error: view === 'error',
+        gated: gated, pending: view === 'pending',
+        dataReady: view !== 'loading' && view !== 'empty',
+        canTransact: !gated
+      },
+      h: {
+        go: {
+          portfolio: () => this.set({ route: 'portfolio' }),
+          gold: () => this.set({ route: 'asset', asset: 'gold' }),
+          activity: () => this.set({ route: 'activity' }),
+          buy: () => this.set({ route: 'buy', buyStep: 1 }),
+          redeem: () => this.set({ route: 'redeem', redeemStep: 1 }),
+          reserve: () => this.set({ route: 'reserve' }),
+          obligation: () => this.set({ route: 'obligation' }),
+          settings: () => this.set({ route: 'settings' }),
+          auth: () => this.set({ route: 'auth' })
+        },
+        view: {
+          live: () => this.set({ view: 'live' }), loading: () => this.set({ view: 'loading' }),
+          empty: () => this.set({ view: 'empty' }), error: () => this.set({ view: 'error' }),
+          gated: () => this.set({ view: 'gated' }), pending: () => this.set({ view: 'pending' })
+        }
+      },
+      totals: {
+        valueText: this.usd(total),
+        whole: Math.floor(total).toLocaleString('en-US'),
+        cents: '.' + total.toFixed(2).split('.')[1],
+        deltaText: '+0.89%',
+        deltaAbs: '+$124.31 · 24h',
+        gramsText: this.num(totalGrams, 2) + ' g',
+        kgText: this.num(totalGrams / 1000, 3) + ' kg',
+        tokensText: this.num(totalGrams, 2),
+        barsText: '4 bars · 2 vaults'
+      },
+      holdings: hs,
+      stack: stack,
+      recent: activity.slice(0, 5),
+      activityRows: filtered,
+      activityCount: filtered.length + ' of ' + activity.length + ' entries',
+      reserves: reserves,
+      audits: AUDITS,
+      custodians: CUSTODIANS,
+      active: {
+        label: active.label, symbol: active.symbol, color: active.color, el: active.el,
+        fineness: active.fineness, custodian: active.custodian, form: active.form,
+        serialsText: active.serials.join(' · '),
+        spotText: this.usd(active.spot), chText: this.signed(active.ch),
+        chColor: active.ch >= 0 ? '#5E9C7B' : '#B4685E',
+        gramsText: activeH.gramsText, ozText: activeH.ozText, valueText: activeH.valueText,
+        perGramText: activeH.perGramText
+      },
+      chart: chart,
+      assetTabs: hs.map((hd) => ({
+        key: hd.key, label: hd.label, color: hd.color,
+        fg: hd.key === s.asset ? '#E8E6E1' : '#8B9199',
+        line: hd.key === s.asset ? hd.color : '#23272C',
+        onClick: () => this.set({ route: 'asset', asset: hd.key })
+      })),
+      assetActivity: activity.filter((a) => a.asset === s.asset),
+      buy: {
+        step: s.buyStep,
+        s1: s.buyStep === 1, s2: s.buyStep === 2, s3: s.buyStep === 3, s4: s.buyStep === 4,
+        modeWeight: s.buyMode === 'weight',
+        weight: s.buyWeight,
+        weightText: this.num(buyGrams, 3) + ' g',
+        ozText: this.num(buyGrams / G_PER_OZ, 4) + ' ozt',
+        valueText: this.usd(buyValue),
+        feeText: this.usd(buyFee),
+        storageText: this.usd(buyStorage),
+        totalText: this.usd(buyValue + buyFee + buyStorage),
+        onWeight: (e) => this.set({ buyWeight: e.target.value }),
+        setWeightMode: () => this.set({ buyMode: 'weight' }),
+        setCurrencyMode: () => this.set({ buyMode: 'currency' }),
+        toReview: () => this.set({ buyStep: 2 }),
+        toPending: () => this.set({ buyStep: 3 }),
+        toReceipt: () => this.set({ buyStep: 4 }),
+        back: () => this.set({ buyStep: Math.max(1, s.buyStep - 1) }),
+        reset: () => this.set({ buyStep: 1 }),
+        preset10: () => this.set({ buyWeight: '10' }),
+        preset50: () => this.set({ buyWeight: '50' }),
+        preset100: () => this.set({ buyWeight: '100' })
+      },
+      redeem: {
+        s1: s.redeemStep === 1, s2: s.redeemStep === 2, s3: s.redeemStep === 3, s4: s.redeemStep === 4,
+        delivery: s.redeemMethod === 'delivery',
+        gramsText: this.num(Number(s.redeemGrams), 3) + ' g',
+        valueText: this.usd(redeemValue),
+        feeText: this.usd(redeemFee),
+        totalText: this.usd(redeemValue - redeemFee),
+        burnText: this.num(Number(s.redeemGrams), 2) + ' APX-AU',
+        onGrams: (e) => this.set({ redeemGrams: e.target.value }),
+        setDelivery: () => this.set({ redeemMethod: 'delivery' }),
+        setSettlement: () => this.set({ redeemMethod: 'settlement' }),
+        next: () => this.set({ redeemStep: Math.min(4, s.redeemStep + 1) }),
+        back: () => this.set({ redeemStep: Math.max(1, s.redeemStep - 1) }),
+        reset: () => this.set({ redeemStep: 1 })
+      },
+      filters: {
+        assetAll: s.filterAsset === 'all',
+        onAsset: (e) => this.set({ filterAsset: e.target.value }),
+        onType: (e) => this.set({ filterType: e.target.value }),
+        onStatus: (e) => this.set({ filterStatus: e.target.value }),
+        clear: () => this.set({ filterAsset: 'all', filterType: 'all', filterStatus: 'all' })
+      },
+      ob: {
+        period: s.obPeriod,
+        periodText: months + ' months',
+        baseText: this.usd(total),
+        rateText: (rate * 100).toFixed(2) + '% p.a.',
+        custodyText: this.usd(custody),
+        adminText: this.usd(admin),
+        zakatOn: zakatOn,
+        zakatText: this.usd(zakat),
+        zakatNote: months >= 12 ? 'Lunar year completed — 2.5% applies' : 'Not yet due — applies at 12 months of continuous holding',
+        totalText: this.usd(obligationTotal),
+        formula: '(portfolio value × custody rate × months ÷ 12) + (portfolio value × 0.10% × months ÷ 12) + zakat where held ≥ 12 months',
+        onPeriod: (e) => this.set({ obPeriod: e.target.value }),
+        tierStandard: s.obTier === 'standard',
+        setStandard: () => this.set({ obTier: 'standard' }),
+        setInstitutional: () => this.set({ obTier: 'institutional' })
+      },
+      auth: {
+        login: s.authScreen === 'login', register: s.authScreen === 'register',
+        reset: s.authScreen === 'reset', gate: s.authScreen === 'gate',
+        toLogin: () => this.set({ authScreen: 'login' }),
+        toRegister: () => this.set({ authScreen: 'register' }),
+        toReset: () => this.set({ authScreen: 'reset' }),
+        toGate: () => this.set({ authScreen: 'gate' })
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
